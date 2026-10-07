@@ -1,0 +1,47 @@
+export const MOCK_NOTIFICATIONS = [
+  {
+    id: 'notif_001',
+    title: 'Application Shortlisted',
+    message: 'Your application for Java Backend Developer at TechCorp Solutions has been shortlisted for technical review.',
+    type: 'SHORTLIST',
+    timestamp: '2 hours ago',
+    read: false,
+    link: '/student/applications',
+  },
+  {
+    id: 'notif_002',
+    title: 'Interview Scheduled',
+    message: 'Your Technical Round 1 interview with TechCorp Solutions is scheduled for tomorrow at 03:00 PM IST.',
+    type: 'INTERVIEW',
+    timestamp: '5 hours ago',
+    read: false,
+    link: '/student/interviews',
+  },
+  {
+    id: 'notif_003',
+    title: 'Resume Score Updated',
+    message: 'Your AI Resume Score has been analyzed! Your current score is 82/100 with 4 actionable recommendations.',
+    type: 'RESUME',
+    timestamp: '1 day ago',
+    read: true,
+    link: '/student/resume-analysis',
+  },
+  {
+    id: 'notif_004',
+    title: 'New Matched Job Alert',
+    message: 'Razorflow FinTech posted a new role "Frontend React Engineer" with an 88% skill match for your profile.',
+    type: 'JOB',
+    timestamp: '2 days ago',
+    read: true,
+    link: '/student/jobs/job_02',
+  },
+  {
+    id: 'notif_005',
+    title: 'Placement Offer Released',
+    message: 'Congratulations! Cognitive Global Services has rolled out an offer for Graduate Software Trainee (₹8.5 LPA).',
+    type: 'OFFER',
+    timestamp: '4 days ago',
+    read: true,
+    link: '/student/applications',
+  }
+];

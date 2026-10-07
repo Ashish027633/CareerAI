@@ -1,0 +1,85 @@
+export const MOCK_ACTIVE_RESUME = {
+  id: 'res_001',
+  fileName: 'Ashish_Sharma_Resume_2026.pdf',
+  fileSize: '1.4 MB',
+  fileSizeBytes: 1468006,
+  fileType: 'application/pdf',
+  uploadedAt: '2026-09-28T14:30:00Z',
+  status: 'Ready & Analyzed',
+  version: 'v2.4',
+  downloadUrl: '#',
+};
+
+export const MOCK_RESUME_ANALYSIS = {
+  id: 'ana_001',
+  resumeId: 'res_001',
+  overallScore: 82,
+  analyzedAt: '2026-09-28T14:32:00Z',
+  targetRole: 'Full Stack / Backend Engineer',
+  verdict: 'Strong Match for Junior/Associate Backend & Full Stack Roles',
+  categoryScores: [
+    { category: 'Skills', score: 88, maxScore: 100, status: 'Excellent', weight: '30%' },
+    { category: 'Education', score: 90, maxScore: 100, status: 'Excellent', weight: '15%' },
+    { category: 'Projects', score: 85, maxScore: 100, status: 'Good', weight: '25%' },
+    { category: 'Experience', score: 75, maxScore: 100, status: 'Moderate', weight: '15%' },
+    { category: 'Certifications', score: 70, maxScore: 100, status: 'Needs Boost', weight: '10%' },
+    { category: 'Formatting', score: 84, maxScore: 100, status: 'ATS Friendly', weight: '5%' },
+  ],
+  detectedSkills: [
+    { name: 'Java', level: 'Advanced', category: 'Backend' },
+    { name: 'Spring Boot', level: 'Intermediate', category: 'Framework' },
+    { name: 'React', level: 'Advanced', category: 'Frontend' },
+    { name: 'JavaScript', level: 'Advanced', category: 'Frontend' },
+    { name: 'SQL / MySQL', level: 'Intermediate', category: 'Database' },
+    { name: 'Python', level: 'Intermediate', category: 'Language' },
+    { name: 'Machine Learning', level: 'Foundational', category: 'AI/Data' },
+    { name: 'REST API', level: 'Advanced', category: 'Architecture' },
+    { name: 'Git & GitHub', level: 'Proficient', category: 'Dev Tools' },
+    { name: 'Tailwind CSS', level: 'Proficient', category: 'Frontend' },
+  ],
+  missingSkills: [
+    { name: 'Docker', priority: 'High', demandRatio: '84% of top campus roles require Docker' },
+    { name: 'AWS Cloud', priority: 'High', demandRatio: '76% of full-stack listings prefer AWS/GCP' },
+    { name: 'Kubernetes', priority: 'Medium', demandRatio: 'Container orchestration desired for microservices' },
+    { name: 'CI/CD Pipelines', priority: 'Medium', demandRatio: 'GitHub Actions / Jenkins testing automation' },
+  ],
+  recommendations: [
+    {
+      id: 'rec_1',
+      title: 'Containerize Your Portfolio Projects (Docker)',
+      impact: '+6 pts',
+      description: 'Add a Dockerfile and docker-compose.yml to your Distributed Placement Portal project. Mention containerization in your resume bullet points.',
+      category: 'DevOps & Deployment',
+    },
+    {
+      id: 'rec_2',
+      title: 'Deepen Spring Boot & Microservices Knowledge',
+      impact: '+4 pts',
+      description: 'Include Spring Security JWT configuration and distributed caching (Redis) details to stand out for high-tier enterprise backends.',
+      category: 'Backend Mastery',
+    },
+    {
+      id: 'rec_3',
+      title: 'Quantify Project Results & Performance Metrics',
+      impact: '+5 pts',
+      description: 'Instead of "built RESTful APIs", write: "engineered 14+ REST APIs supporting 1,500 concurrent students with sub-120ms response latencies".',
+      category: 'ATS Bullet Optimization',
+    },
+    {
+      id: 'rec_4',
+      title: 'Earn an Industry Cloud Certification',
+      impact: '+4 pts',
+      description: 'AWS Certified Cloud Practitioner or Azure Fundamentals will solidify your cloud readiness profile.',
+      category: 'Certifications',
+    },
+  ],
+  strengths: [
+    'Clean single-column layout with optimal ATS parser readability.',
+    'Clear section separation for Education, Skills, and Projects.',
+    'Consistent GitHub project URLs and clean contact headers.',
+  ],
+  weaknesses: [
+    'Lacks quantifiable throughput/latency metrics in internship bullets.',
+    'No cloud deployment or automated CI/CD pipeline mentioned.',
+  ]
+};
