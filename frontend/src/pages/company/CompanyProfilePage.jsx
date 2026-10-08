@@ -22,7 +22,9 @@ export const CompanyProfilePage = () => {
     setLoading(true);
     try {
       const res = await companyService.getProfile();
-      if (res.success) setProfile(res.data);
+      if (res && res.data) setProfile(res.data);
+    } catch (err) {
+      toast.error(err.message || 'Failed to load company profile');
     } finally {
       setLoading(false);
     }
@@ -33,9 +35,10 @@ export const CompanyProfilePage = () => {
     setSaving(true);
     try {
       const res = await companyService.updateProfile(profile);
-      if (res.success) {
-        toast.success('Company profile updated successfully.');
-      }
+      if (res && res.data) setProfile(res.data);
+      toast.success(res?.message || 'Company profile updated successfully.');
+    } catch (err) {
+      toast.error(err.message || 'Failed to update company profile');
     } finally {
       setSaving(false);
     }

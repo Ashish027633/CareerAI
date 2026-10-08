@@ -1,0 +1,46 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: careerai-backend
+
+  # Database Configuration (Phase 2 Target: H2 In-Memory)
+  datasource:
+    url: jdbc:h2:mem:careerai_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: false
+  
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# CareerAI Custom Application Properties
+app:
+  # Enable Demo Data Seeding
+  seed-demo-data: true
+  
+  security:
+    jwt:
+      # Use a secure random 256-bit+ base64 encoded secret in production
+      secret: "CareerAI_Super_Secret_Key_For_Phase2_Local_Development_Only_Replace_In_Prod!"
+      # 24 hours in milliseconds
+      expiration: 86400000 
+  
+  oauth2:
+    google:
+      client-id: ${GOOGLE_CLIENT_ID:placeholder-client-id}
+      client-secret: ${GOOGLE_CLIENT_SECRET:placeholder-client-secret}

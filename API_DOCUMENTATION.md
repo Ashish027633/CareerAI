@@ -48,3 +48,27 @@ All endpoints will follow this response wrapper in Phase 2:
 - `GET /api/admin/companies`: Directory of registered companies with approval & moderation controls.
 - `GET /api/admin/jobs`: Platform-wide job listing moderation.
 - `GET /api/admin/applications`: Platform-wide application ledger.
+
+## 7. Phase 2B Extensions (Implemented)
+- `GET /api/student/profile`: Returns `StudentProfileDto`. Requires `STUDENT` role.
+- `PUT /api/student/profile`: Updates `StudentProfileDto`.
+- `GET /api/company/profile`: Returns `CompanyProfileDto`. Requires `COMPANY` role.
+- `PUT /api/company/profile`: Updates `CompanyProfileDto`.
+- `GET /api/jobs`: Returns list of active `JobDto`.
+- `GET /api/jobs/{id}`: Returns specific `JobDto`.
+- `POST /api/company/jobs`: Creates a job.
+- `PUT /api/company/jobs/{id}`: Updates a job.
+- `DELETE /api/company/jobs/{id}`: Deletes a job.
+- `POST /api/jobs/{jobId}/apply`: Applies to a job.
+- `GET /api/applications/my`: Gets student's applications.
+- `GET /api/company/jobs/{jobId}/applicants`: Gets applicants for a job.
+- `PATCH /api/company/applications/{id}/status`: Updates application status.
+- `POST /api/company/interviews`: Schedules an interview.
+- `GET /api/interviews/my`: Gets student's interviews.
+- `GET /api/company/interviews`: Gets company's interviews.
+- `POST /api/resumes/upload`: Uploads a PDF resume.
+- `GET /api/resumes/my-resume`: Gets active resume.
+- `GET /api/notifications`: Gets notifications.
+- `PATCH /api/notifications/{id}/read`: Marks a notification as read.
+- `PATCH /api/notifications/read-all`: Marks all as read.
+- `GET /api/admin/metrics`: Gets overall DB metrics.

@@ -1,22 +1,28 @@
-import { simulateDelay } from './client';
-import { MOCK_INTERVIEWS } from '../../data/mock/interviews';
-
-let interviews = [...MOCK_INTERVIEWS];
+import apiClient from './client';
 
 export const interviewService = {
   async getMyInterviews() {
-    await simulateDelay(200);
-    return { success: true, data: [...interviews] };
+    const response = await apiClient.get('/interviews/my');
+    return response;
+  },
+
+  async getMyCompanyInterviews() {
+    const response = await apiClient.get('/company/interviews');
+    return response;
   },
 
   async scheduleInterview(interviewData) {
-    await simulateDelay(350);
-    const created = {
-      ...interviewData,
-      id: `int_${Date.now()}`,
-      status: 'Upcoming',
-    };
-    interviews.unshift(created);
-    return { success: true, data: created, message: 'Interview scheduled successfully' };
+    const response = await apiClient.post('/company/interviews', interviewData);
+    return response;
   },
+
+  async updateInterview(id, data) {
+    const response = await apiClient.put(`/interviews/${id}`, data);
+    return response;
+  },
+
+  async cancelInterview(id) {
+    const response = await apiClient.delete(`/interviews/${id}`);
+    return response;
+  }
 };

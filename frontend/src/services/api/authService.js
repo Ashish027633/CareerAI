@@ -1,4 +1,4 @@
-import { simulateDelay } from './client';
+import apiClient, { simulateDelay } from './client';
 import { MOCK_STUDENT_USER, MOCK_COMPANY_USER, MOCK_ADMIN_USER } from '../../data/mock/users';
 
 const STORAGE_KEY = 'careerai_auth_user';
@@ -8,17 +8,14 @@ export const authService = {
    * Log in user by role or credentials
    */
   async login({ email, password, role = 'student' }) {
-    await simulateDelay(350);
-    let user;
-    if (role === 'admin' || email.includes('admin')) {
-      user = { ...MOCK_ADMIN_USER };
-    } else if (role === 'company' || email.includes('recruiter') || email.includes('company')) {
-      user = { ...MOCK_COMPANY_USER };
-    } else {
-      user = { ...MOCK_STUDENT_USER };
+    const response = await apiClient.post('/auth/login', { email, password });
+    const { token, user } = response.data;
+    
+    // Normalize user role mapping for frontend UI components expecting lowercase
+    if (user.role) {
+      user.role = user.role.replace('ROLE_', '').toLowerCase();
     }
-
-    const token = `mock_jwt_token_${user.id}_${Date.now()}`;
+    
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     localStorage.setItem('careerai_token', token);
     return { success: true, user, token };
@@ -28,43 +25,32 @@ export const authService = {
    * Register a new student account
    */
   async registerStudent(studentData) {
-    await simulateDelay(400);
-    const newUser = {
-      ...MOCK_STUDENT_USER,
-      id: `usr_std_${Date.now()}`,
-      fullName: studentData.fullName,
-      email: studentData.email,
-      phone: studentData.phone,
-      college: studentData.college,
-      branch: studentData.branch,
-      graduationYear: Number(studentData.graduationYear) || 2026,
-      role: 'student',
-    };
-    const token = `mock_jwt_token_${newUser.id}`;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newUser));
+    const response = await apiClient.post('/auth/register/student', studentData);
+    const { token, user } = response.data;
+    
+    if (user.role) {
+      user.role = user.role.replace('ROLE_', '').toLowerCase();
+    }
+    
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     localStorage.setItem('careerai_token', token);
-    return { success: true, user: newUser, token };
+    return { success: true, user, token };
   },
 
   /**
    * Register a new company account
    */
   async registerCompany(companyData) {
-    await simulateDelay(400);
-    const newUser = {
-      ...MOCK_COMPANY_USER,
-      id: `usr_cmp_${Date.now()}`,
-      companyName: companyData.companyName,
-      email: companyData.officialEmail,
-      industry: companyData.industry,
-      website: companyData.website,
-      role: 'company',
-      verified: false,
-    };
-    const token = `mock_jwt_token_${newUser.id}`;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newUser));
+    const response = await apiClient.post('/auth/register/company', companyData);
+    const { token, user } = response.data;
+    
+    if (user.role) {
+      user.role = user.role.replace('ROLE_', '').toLowerCase();
+    }
+    
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     localStorage.setItem('careerai_token', token);
-    return { success: true, user: newUser, token };
+    return { success: true, user, token };
   },
 
   /**
@@ -115,15 +101,19 @@ export const authService = {
     } catch (e) {
       console.error('Failed to parse stored user', e);
     }
-    // Default to student if no session exists yet
-    return MOCK_STUDENT_USER;
+    // Return null if no valid session exists
+    return null;
   },
 
   /**
    * Log out current session
    */
   async logout() {
-    await simulateDelay(150);
+    try {
+      await apiClient.post('/auth/logout');
+    } catch (error) {
+      console.warn('Logout API failed, proceeding with local cleanup', error);
+    }
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem('careerai_token');
     return { success: true };

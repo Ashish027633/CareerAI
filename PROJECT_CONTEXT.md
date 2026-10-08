@@ -4,10 +4,14 @@
 CareerAI is an intelligent, AI-powered campus placement preparation, resume analysis, and job matching platform designed for students, recruiting companies, and institutional placement administrators. It bridges the gap between candidate resumes and modern company job descriptions through deep skill gap extraction, ATS resume scoring, job recommendations, applicant tracking, and placement analytics.
 
 ## Current Phase
-PHASE 1 — FRONTEND
+PHASE 2D — FINAL BACKEND GAPS
 
 ## Status
-Frontend UI implemented and visually refined.
+Phase 1 Frontend completed.
+Phase 2A Backend Foundation completed.
+Phase 2B Backend Business Logic completed.
+Phase 2C Frontend ↔ Backend Integration completed.
+Phase 2D Final Backend Gaps is IN PROGRESS.
 
 ## Completed
 - **Visual Identity & Design Tokens**: Transitioned from generic dashboard aesthetic to a bespoke, human-designed SaaS palette centered around deep dark obsidian (`#08090C`), rich burgundy/wine (`#991B32`), warm ivory highlights (`#F7F4EB`), and muted coral accents (`#E05D5D`). Centralized semantic tokens in `src/constants/themeTokens.js` and `tailwind.config.js`.
@@ -23,20 +27,19 @@ Frontend UI implemented and visually refined.
 - **Decoupled API Service Layer**: Forward-compatible service layer in `src/services/api/` (`authService`, `resumeService`, `jobService`, `applicationService`, `companyService`, `adminService`, `interviewService`, `notificationService`) ready for zero-rewrite Spring Boot connection.
 
 ## Current Task
-Phase 1 visual refinement and experience upgrade complete and verified. Vite production build passing cleanly.
+Implementing final missing backend gaps: Admin directory endpoints and Interview edit/cancel operations.
 
 ## Pending
-- Phase 2: Java Spring Boot REST API integration (do not start yet).
 - Phase 3: AI/ML skill extraction and semantic embedding matching.
 - Phase 4: MySQL relational schema and JPA persistence.
 - Phase 5: Security hardening, testing, and deployment.
 - Phase 6: Documentation, presentation PPT, and viva defense materials.
 
 ## Next Phase
-PHASE 2 — JAVA SPRING BOOT BACKEND
+PHASE 3 — AI/ML SKILL EXTRACTION
 
 ## Technology Stack
 - **Frontend (Phase 1)**: React 18, Vite, JavaScript, Tailwind CSS, React Router v6, Lucide React, Recharts, Axios.
-- **Backend (Phase 2 - Next)**: Java 21, Spring Boot 3.x, Spring Security 6, JWT, Spring Data JPA.
+- **Backend (Phase 2 - Current)**: Java 17, Spring Boot 3.3.4, Spring Security 6, JWT, Spring Data JPA, H2 Database (in-memory).
 - **Database (Phase 4)**: MySQL / PostgreSQL relational schema.
 - **AI/ML (Phase 3)**: Resume parsing, TF-IDF / vector embeddings, semantic skill extraction.

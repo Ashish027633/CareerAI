@@ -2,6 +2,24 @@
 
 All notable changes to the CareerAI project will be documented in this file.
 
+## [2.2.0-backend-business-logic] - Unreleased
+### Added (Phase 2B Java Spring Boot Business Logic)
+- **Work in Progress**: Implementing full backend business logic for Student, Company, Jobs, Applications, Resumes, Interviews, Notifications, and Admin modules.
+
+## [2.1.0-full-system-verification] - 2026-10-08
+### Verified (Phase 1 and Phase 2 Readiness)
+- **Phase 1 Frontend Verification**: Validated React architecture, production build (0 errors), components, light-mode CSS tokens, and routing. Simulated parallel deployment with backend on port `5173`.
+- **Phase 2 Backend Verification**: Verified Spring Boot context initialization, H2 database connection & persistence, and stateless JWT token generation. Ensured successful cross-origin API integration via raw tests on port `8080`.
+
+## [2.0.0-backend-scaffolding] - 2026-10-08
+### Added (Phase 2 Java Spring Boot Backend)
+- **Spring Boot 3.x Scaffolding**: Initialized `backend/` Maven project with Java 21, Spring Web, Spring Security, Spring Data JPA, H2 Database, Validation, JJWT, and Lombok.
+- **Core Architecture**: Implemented standard `ApiResponse` wrapper matching frontend contract and `GlobalExceptionHandler` to translate exceptions into 401, 403, and 400 JSON standard formats.
+- **Security Layer**: Configured Stateless JWT authentication (`JwtService`, `JwtAuthenticationFilter`, `SecurityConfig`) with CORS configured for `http://localhost:5173`. Established Role-based authorization (`STUDENT`, `COMPANY`, `ADMIN`).
+- **Domain Entities & JPA**: Created JPA entities mapping to `DATABASE_SCHEMA.md` (`User`, `StudentProfile`, `CompanyProfile`, `Resume`, `ResumeAnalysis`, `Job`, `JobApplication`, `Interview`, `Notification`) and `StringListConverter` for JSON/Array cross-database compatibility.
+- **Services & Controllers**: Stubbed REST controllers corresponding to Phase 1 frontend services (`AuthController`, `JobController`, `ResumeController`, `ApplicationController`, `InterviewController`, `AdminController`). Implemented `AuthService` with secure BCrypt registration logic.
+- **Demo Data Initializer**: Created `DemoDataInitializer` (toggled via `app.seed-demo-data=true`) to seed H2 database with a deterministic subset of users, jobs, applications, and interviews for seamless frontend testing.
+
 ## [1.2.0-frontend-light-overhaul] - 2026-10-07
 ### Changed & Enhanced (Light Mode First, Responsive & Full Width Fix)
 - **Light Mode Only Architecture**:

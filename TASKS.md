@@ -67,3 +67,42 @@
 - [x] Two-column desktop editorial authentication layouts with Google Sign-In notice modal
 - [x] Recharts data series and cartesian grids calibrated for light theme readability
 - [x] Verified zero console/build errors with `npm run build`
+
+## Current Sprint: Phase 2A - Java Spring Boot Foundation (COMPLETED)
+
+### Task Group 9: Backend Scaffolding
+- [x] Initialize Spring Boot 3.3.x with Java 17 compatibility
+- [x] Configure standard `ApiResponse` wrapper
+- [x] Configure global exception handlers (400, 401, 403, 404)
+
+### Task Group 10: Security & JPA Entities
+- [x] Implement Stateless JWT authentication & role-based access control
+- [x] Create core JPA entities (User, Profiles, Resume, Jobs, Applications)
+- [x] Configure H2 in-memory database profile
+
+### Task Group 11: Demo Seeding & Controllers
+- [x] Implement `DemoDataInitializer` to auto-populate H2 database
+- [x] Create API endpoints to match Phase 1 Mock Contracts
+- [x] Verified end-to-end API success (Auth, Register, Roles)
+
+## Current Sprint: Phase 2B - Backend Business Logic (IN PROGRESS)
+
+### Task Group 12: Core Entities & Utility Layer
+- [ ] Update `Resume` Entity (Add `@Lob` for PDF bytes)
+- [ ] Create DTOs (Student, Company, Job, Application, Interview, Notification, Admin)
+- [ ] Implement `SecurityUtils` for extracting authenticated User Details
+
+### Task Group 13: Service & Controller Implementation
+- [ ] Implement Profile Modules (StudentService, CompanyService)
+- [ ] Implement Job Module (CRUD, Ownership Validation, Basic Filtering)
+- [ ] Implement Application Module (Apply, Status Updates, Eligibility Checking)
+- [ ] Implement Resume Module (Upload PDF to H2, Get Metadata)
+- [ ] Implement Interview Module (Scheduling, Listing)
+- [ ] Implement Notification Module (Create, Mark Read)
+- [ ] Implement Admin Module (Live metrics calculation from DB)
+
+### Task Group 14: Verification & Testing
+- [ ] Write targeted Unit Tests for Business Logic
+- [ ] Write MockMvc Integration Tests for critical flows
+- [ ] Manual verification via cURL/Postman
+- [ ] Verify H2 Database Persistence for all entities

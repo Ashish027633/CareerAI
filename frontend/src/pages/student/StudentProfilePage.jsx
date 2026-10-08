@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { studentService } from '../../services/api/studentService';
 import { useToast } from '../../context/ToastContext';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { Card } from '../../components/common/Card';
@@ -23,16 +24,36 @@ export const StudentProfilePage = () => {
   const { user } = useAuth();
   const toast = useToast();
 
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [profile, setProfile] = useState({ ...user });
+  const [profile, setProfile] = useState({});
   const [newSkill, setNewSkill] = useState('');
 
-  const handleSave = () => {
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await studentService.getMyProfile();
+        setProfile(response.data || {});
+      } catch (err) {
+        toast.error(err.message || 'Failed to load profile');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  const handleSave = async () => {
     setSaving(true);
-    setTimeout(() => {
+    try {
+      const response = await studentService.updateProfile(profile);
+      setProfile(response.data || profile);
+      toast.success(response.message || 'Student profile updated successfully!');
+    } catch (err) {
+      toast.error(err.message || 'Failed to update profile');
+    } finally {
       setSaving(false);
-      toast.success('Student profile updated successfully!');
-    }, 400);
+    }
   };
 
   const handleAddSkill = (e) => {
@@ -54,6 +75,10 @@ export const StudentProfilePage = () => {
       skills: profile.skills.filter((s) => s !== skillToRemove),
     });
   };
+
+  if (loading) {
+    return <div className="p-8 text-center text-slate-muted">Loading profile...</div>;
+  }
 
   return (
     <div className="space-y-6 w-full animate-fade-up">

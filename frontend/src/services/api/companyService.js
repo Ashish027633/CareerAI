@@ -1,9 +1,5 @@
-import { simulateDelay } from './client';
-import { MOCK_COMPANY_USER } from '../../data/mock/users';
-import { MOCK_JOBS } from '../../data/mock/jobs';
+import apiClient, { simulateDelay } from './client';
 import { MOCK_COMPANY_APPLICANTS } from '../../data/mock/applications';
-
-let companyProfile = { ...MOCK_COMPANY_USER };
 
 export const companyService = {
   /**
@@ -23,20 +19,16 @@ export const companyService = {
     };
   },
 
-  /**
-   * Get company profile details
-   */
   async getProfile() {
-    await simulateDelay(200);
-    return { success: true, data: companyProfile };
+    const response = await apiClient.get('/company/profile');
+    return response;
   },
 
   /**
    * Update company profile details
    */
   async updateProfile(updatedData) {
-    await simulateDelay(350);
-    companyProfile = { ...companyProfile, ...updatedData };
-    return { success: true, data: companyProfile, message: 'Company profile updated successfully' };
+    const response = await apiClient.put('/company/profile', updatedData);
+    return response;
   },
 };
