@@ -12,7 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "job_applications")
+@Table(name = "job_applications", 
+    uniqueConstraints = @UniqueConstraint(columnNames = {"student_id", "job_id"}),
+    indexes = {
+        @Index(name = "idx_jobapp_student", columnList = "student_id"),
+        @Index(name = "idx_jobapp_job", columnList = "job_id"),
+        @Index(name = "idx_jobapp_status", columnList = "status")
+    }
+)
 @Getter
 @Setter
 public class JobApplication {

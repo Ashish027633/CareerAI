@@ -1,14 +1,11 @@
 package com.careerai.domain.entity;
 
-import com.careerai.domain.converter.StringListConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "resume_analyses")
@@ -28,31 +25,35 @@ public class ResumeAnalysis {
     private Integer overallScore;
 
     @Column(nullable = false)
-    private Integer skillsScore;
+    private Integer skillsScore = 0;
 
     @Column(nullable = false)
-    private Integer educationScore;
+    private Integer projectsScore = 0;
 
     @Column(nullable = false)
-    private Integer projectsScore;
+    private Integer educationScore = 0;
 
     @Column(nullable = false)
-    private Integer experienceScore;
+    private Integer experienceScore = 0;
 
     @Column(nullable = false)
-    private Integer formattingScore;
+    private Integer certificationsScore = 0;
 
-    @Convert(converter = StringListConverter.class)
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private List<String> detectedSkills = new ArrayList<>();
+    @Column(nullable = false)
+    private Integer structureScore = 0;
 
-    @Convert(converter = StringListConverter.class)
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private List<String> missingSkills = new ArrayList<>();
+    @Column(nullable = false)
+    private Integer completenessScore = 0;
 
-    @Convert(converter = StringListConverter.class)
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private List<String> recommendations = new ArrayList<>();
+    @Column(nullable = false)
+    private Integer completenessPercentage = 0;
+
+    @Column(nullable = false)
+    private Integer pageCount = 1;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT", nullable = false)
+    private String rawAnalysisJson;
 
     @CreationTimestamp
     @Column(updatable = false)

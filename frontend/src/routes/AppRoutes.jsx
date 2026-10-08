@@ -23,6 +23,7 @@ import { StudentResumePage } from '../pages/student/StudentResumePage';
 import { ResumeAnalysisPage } from '../pages/student/ResumeAnalysisPage';
 import { StudentJobsPage } from '../pages/student/StudentJobsPage';
 import { JobDetailsPage } from '../pages/student/JobDetailsPage';
+import { RecommendedJobsPage } from '../pages/student/RecommendedJobsPage';
 import { StudentApplicationsPage } from '../pages/student/StudentApplicationsPage';
 import { StudentInterviewsPage } from '../pages/student/StudentInterviewsPage';
 import { StudentNotificationsPage } from '../pages/student/StudentNotificationsPage';
@@ -74,6 +75,7 @@ export const AppRoutes = () => {
         <Route path="resume" element={<StudentResumePage />} />
         <Route path="resume-analysis" element={<ResumeAnalysisPage />} />
         <Route path="jobs" element={<StudentJobsPage />} />
+        <Route path="jobs/recommended" element={<RecommendedJobsPage />} />
         <Route path="jobs/:id" element={<JobDetailsPage />} />
         <Route path="applications" element={<StudentApplicationsPage />} />
         <Route path="interviews" element={<StudentInterviewsPage />} />

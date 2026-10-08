@@ -41,9 +41,9 @@ export const JobDetailsPage = () => {
   const loadJobDetails = async () => {
     setLoading(true);
     try {
-      const res = await jobService.getJobById(id);
+      const res = await jobService.getJobMatch(id);
       if (res.success) {
-        setJob(res.data);
+        setJob(res.data); // data is JobMatchDto
       }
     } finally {
       setLoading(false);
@@ -57,7 +57,7 @@ export const JobDetailsPage = () => {
   const handleApply = async () => {
     setApplying(true);
     try {
-      const res = await applicationService.applyForJob(job, customNote);
+      const res = await applicationService.applyForJob(job.job, customNote);
       if (res.success) {
         toast.success(`Application submitted for ${job.title}!`);
         setApplied(true);
@@ -77,14 +77,15 @@ export const JobDetailsPage = () => {
   if (!job) {
     return (
       <ErrorState
-        title="Job Listing Not Found"
-        message="The role you are looking for may have concluded or expired."
+        title="Matching Unavailable"
+        message="The role you are looking for may have concluded, or you need to analyze your resume first to get a personalized job match."
         onRetry={() => navigate('/student/jobs')}
       />
     );
   }
 
   const matchClass = getMatchBadgeClass(job.matchPercentage || 0);
+  const baseJob = job.job;
 
   return (
     <div className="w-full space-y-6 animate-fade-up">
@@ -104,33 +105,33 @@ export const JobDetailsPage = () => {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-[#E8DED4]">
           <div className="flex items-start gap-4">
             <img
-              src={job.companyLogo}
-              alt={job.company}
+              src={baseJob.companyLogo || "https://ui-avatars.com/api/?name=" + encodeURIComponent(baseJob.companyName || 'C')}
+              alt={baseJob.companyName}
               className="w-16 h-16 rounded-2xl object-cover border border-[#E8DED4] flex-shrink-0 shadow-sm"
             />
             <div>
               <div className="flex items-center gap-2.5 flex-wrap">
                 <h1 className="text-xl sm:text-2xl font-black text-[#1E1B1C]">
-                  {job.title}
+                  {baseJob.title}
                 </h1>
                 <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#FAF5EF] text-[#5F5A5C] border border-[#E8DED4]">
-                  {job.jobType}
+                  {baseJob.jobType}
                 </span>
               </div>
-              <p className="text-sm font-semibold text-[#8B0026] mt-1">{job.company}</p>
+              <p className="text-sm font-semibold text-[#8B0026] mt-1">{baseJob.companyName}</p>
 
               <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-[#5F5A5C] mt-3">
                 <span className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-[#817B7E]" /> {job.location}
+                  <MapPin className="w-3.5 h-3.5 text-[#817B7E]" /> {baseJob.location}
                 </span>
                 <span className="flex items-center gap-1 text-[#1E1B1C] font-bold">
-                  <IndianRupee className="w-3.5 h-3.5 text-[#8B0026]" /> {job.salary}
+                  <IndianRupee className="w-3.5 h-3.5 text-[#8B0026]" /> {baseJob.salaryRange}
                 </span>
                 <span className="flex items-center gap-1">
-                  <Briefcase className="w-3.5 h-3.5 text-[#817B7E]" /> {job.experience}
+                  <Briefcase className="w-3.5 h-3.5 text-[#817B7E]" /> {baseJob.experienceLevel}
                 </span>
                 <span className="flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-[#817B7E]" /> Posted {formatDate(job.postedDate)}
+                  <Clock className="w-3.5 h-3.5 text-[#817B7E]" /> Posted {formatDate(baseJob.createdAt)}
                 </span>
               </div>
             </div>
@@ -141,11 +142,11 @@ export const JobDetailsPage = () => {
               variant="primary"
               size="lg"
               icon={Send}
-              disabled={applied}
+              disabled={applied || !job.eligible}
               onClick={() => setApplyModalOpen(true)}
               className="w-full md:w-auto font-bold shadow-md"
             >
-              {applied ? 'Application Submitted' : 'Submit Application'}
+              {!job.eligible ? 'Not Eligible' : applied ? 'Application Submitted' : 'Submit Application'}
             </Button>
           </div>
         </div>
@@ -162,41 +163,63 @@ export const JobDetailsPage = () => {
               </div>
               <div>
                 <h4 className="text-sm font-bold text-[#1E1B1C] flex items-center gap-1.5">
-                  <Target className="w-4 h-4 text-[#8B0026]" /> Candidate Competency Compatibility
+                  <Target className="w-4 h-4 text-[#8B0026]" /> CareerAI Match Score
                 </h4>
                 <p className="text-xs text-[#5F5A5C] mt-0.5">
-                  Benchmarked using your active resume against this role's required skills.
+                  AI Relevance: {job.aiRelevanceScore} / 90 | Semantic Relevance: {Math.round((job.semanticSimilarityScore/15)*100)}%
+                </p>
+                <p className="text-xs text-[#5F5A5C] mt-0.5">
+                  Eligibility: {job.eligible ? <span className="text-[#238B68] font-bold">Eligible ✓</span> : <span className="text-[#D64F63] font-bold">Not Eligible ✗</span>}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-xs">
-              <span className="text-[#238B68] font-bold">
-                {job.matchedSkills?.length || 0} Matched
-              </span>
-              <span className="text-[#817B7E]">•</span>
-              <span className="text-[#D64F63] font-bold">
-                {job.missingSkills?.length || 0} Missing
-              </span>
+            <div className="flex flex-col text-xs space-y-1 text-right">
+               {job.matchingReasons?.map((r, i) => (
+                  <span key={i} className="text-[#5F5A5C] italic">{r}</span>
+               ))}
+               {job.eligibilityReasons?.map((r, i) => (
+                  <span key={i} className="text-[#8B0026] italic font-medium">{r}</span>
+               ))}
             </div>
+          </div>
+          
+          <div className="mt-3 p-3 rounded-lg bg-blue-50 border border-blue-100 flex items-start gap-2">
+            <Sparkles className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+            <p className="text-[10px] text-blue-700 leading-relaxed font-medium">
+              CareerAI Match Score estimates resume-to-job relevance based on skills, content similarity, and eligibility. It is not a guarantee of hiring or selection.
+            </p>
           </div>
 
           {/* Matched & Missing Skills Badges */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div className="p-4 rounded-xl bg-white border border-[#238B68]/30 shadow-2xs">
               <p className="text-xs font-bold text-[#238B68] uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" /> Matched Skills
+                <CheckCircle2 className="w-4 h-4" /> Matched Required Skills
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {job.matchedSkills?.map((s) => (
                   <SkillBadge key={s} skill={s} type="matched" size="sm" />
                 ))}
               </div>
+              
+              {job.matchedOptionalSkills && job.matchedOptionalSkills.length > 0 && (
+                <>
+                  <p className="text-xs font-bold text-[#238B68] uppercase tracking-wider mt-4 mb-2.5 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4" /> Matched Optional Skills
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {job.matchedOptionalSkills.map((s) => (
+                      <SkillBadge key={s} skill={s} type="matched" size="sm" />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="p-4 rounded-xl bg-white border border-[#D64F63]/30 shadow-2xs">
               <p className="text-xs font-bold text-[#8B0026] uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-                <AlertCircle className="w-4 h-4 text-[#D64F63]" /> Missing Skills for This Role
+                <AlertCircle className="w-4 h-4 text-[#D64F63]" /> Missing Required Skills
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {job.missingSkills?.length === 0 ? (
@@ -232,22 +255,16 @@ export const JobDetailsPage = () => {
         <h4 className="text-sm font-bold text-[#1E1B1C] mb-3">Institutional Eligibility Criteria</h4>
         <div className="p-4 rounded-xl bg-[#FAF5EF] border border-[#E8DED4] space-y-2 text-xs text-[#5F5A5C] mb-6">
           <p>
-            <strong className="text-[#1E1B1C]">Eligible Degrees:</strong> {job.eligibility?.degrees?.join(', ')}
+            <strong className="text-[#1E1B1C]">Minimum CGPA Cutoff:</strong> {baseJob.minCgpa || 0}
           </p>
           <p>
-            <strong className="text-[#1E1B1C]">Passing Batches:</strong> {job.eligibility?.graduationYear?.join(', ')}
-          </p>
-          <p>
-            <strong className="text-[#1E1B1C]">Minimum CGPA Cutoff:</strong> {job.eligibility?.minCgpa || 7.0}
-          </p>
-          <p>
-            <strong className="text-[#1E1B1C]">Active Backlogs Permitted:</strong> {job.eligibility?.backlogsAllowed ? 'Yes' : 'No Active Backlogs'}
+            <strong className="text-[#1E1B1C]">Experience Level:</strong> {baseJob.experienceLevel}
           </p>
         </div>
 
         <h4 className="text-sm font-bold text-[#1E1B1C] mb-3">Compensation & Perks</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-[#5F5A5C]">
-          {job.benefits?.map((b, i) => (
+          {baseJob.benefits?.map((b, i) => (
             <div key={i} className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-[#E8DED4] shadow-2xs">
               <CheckCircle2 className="w-4 h-4 text-[#238B68] flex-shrink-0" />
               <span className="font-medium text-[#1E1B1C]">{b}</span>
@@ -260,8 +277,8 @@ export const JobDetailsPage = () => {
       <Modal
         isOpen={applyModalOpen}
         onClose={() => setApplyModalOpen(false)}
-        title={`Apply for ${job.title}`}
-        subtitle={`${job.company} • Competency Match: ${job.matchPercentage}%`}
+        title={`Apply for ${baseJob.title}`}
+        subtitle={`${baseJob.companyName} • CareerAI Match: ${job.matchPercentage}%`}
         footer={
           <div className="flex items-center justify-end gap-2">
             <Button variant="ghost" onClick={() => setApplyModalOpen(false)}>
@@ -300,7 +317,7 @@ export const JobDetailsPage = () => {
           </div>
 
           <p className="text-[11px] text-[#5F5A5C] leading-relaxed">
-            By submitting, your verified academic credentials and ATS score (82/100) will be transmitted directly to {job.company}'s recruitment operations dashboard.
+            By submitting, your verified academic credentials and CareerAI match score ({job.matchPercentage}%) will be transmitted directly to {baseJob.companyName}'s recruitment dashboard.
           </p>
         </div>
       </Modal>

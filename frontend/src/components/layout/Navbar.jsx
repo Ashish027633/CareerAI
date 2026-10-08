@@ -13,7 +13,7 @@ import {
   Layers,
 } from 'lucide-react';
 import { PUBLIC_NAV } from '../../constants/navigation';
-import { MOCK_NOTIFICATIONS } from '../../data/mock/notifications';
+
 
 export const Navbar = ({ onToggleSidebar, isDashboard = false }) => {
   const { user, role, logout, switchRole, isAuthenticated } = useAuth();
@@ -23,7 +23,7 @@ export const Navbar = ({ onToggleSidebar, isDashboard = false }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
-  const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
+  const [notifications, setNotifications] = useState([]);
 
   const profileRef = useRef(null);
   const notifRef = useRef(null);
@@ -106,48 +106,50 @@ export const Navbar = ({ onToggleSidebar, isDashboard = false }) => {
         {/* Right Actions: Role Switcher Demo, Notifications, Profile / Auth Buttons */}
         <div className="flex items-center gap-3">
           {/* Quick Demo Role Switcher Badge (Interactive for testing convenience) */}
-          <div className="hidden sm:flex items-center gap-1 bg-cream-soft px-2.5 py-1 rounded-xl border border-border text-xs">
-            <span className="text-slate-muted font-mono text-[10px] mr-1 font-bold">DEMO:</span>
-            <button
-              onClick={() => {
-                switchRole('student');
-                navigate('/student/dashboard');
-              }}
-              className={`px-2.5 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
-                role === 'student'
-                  ? 'bg-burgundy text-white shadow-wine'
-                  : 'text-slate-muted hover:text-slate-text'
-              }`}
-            >
-              Student
-            </button>
-            <button
-              onClick={() => {
-                switchRole('company');
-                navigate('/company/dashboard');
-              }}
-              className={`px-2.5 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
-                role === 'company'
-                  ? 'bg-burgundy text-white shadow-wine'
-                  : 'text-slate-muted hover:text-slate-text'
-              }`}
-            >
-              Company
-            </button>
-            <button
-              onClick={() => {
-                switchRole('admin');
-                navigate('/admin/dashboard');
-              }}
-              className={`px-2.5 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
-                role === 'admin'
-                  ? 'bg-burgundy text-white shadow-wine'
-                  : 'text-slate-muted hover:text-slate-text'
-              }`}
-            >
-              Admin
-            </button>
-          </div>
+          {import.meta.env.DEV && (
+            <div className="hidden sm:flex items-center gap-1 bg-cream-soft px-2.5 py-1 rounded-xl border border-border text-xs">
+              <span className="text-slate-muted font-mono text-[10px] mr-1 font-bold">DEV/TEST:</span>
+              <button
+                onClick={() => {
+                  switchRole('student');
+                  navigate('/student/dashboard');
+                }}
+                className={`px-2.5 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
+                  role === 'student'
+                    ? 'bg-burgundy text-white shadow-wine'
+                    : 'text-slate-muted hover:text-slate-text'
+                }`}
+              >
+                Student
+              </button>
+              <button
+                onClick={() => {
+                  switchRole('company');
+                  navigate('/company/dashboard');
+                }}
+                className={`px-2.5 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
+                  role === 'company'
+                    ? 'bg-burgundy text-white shadow-wine'
+                    : 'text-slate-muted hover:text-slate-text'
+                }`}
+              >
+                Company
+              </button>
+              <button
+                onClick={() => {
+                  switchRole('admin');
+                  navigate('/admin/dashboard');
+                }}
+                className={`px-2.5 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
+                  role === 'admin'
+                    ? 'bg-burgundy text-white shadow-wine'
+                    : 'text-slate-muted hover:text-slate-text'
+                }`}
+              >
+                Admin
+              </button>
+            </div>
+          )}
 
           {/* Notifications Dropdown (when authenticated) */}
           {isAuthenticated && (

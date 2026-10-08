@@ -8,7 +8,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "resumes")
+@Table(name = "resumes", indexes = {
+    @Index(name = "idx_resume_student", columnList = "student_id")
+})
 @Getter
 @Setter
 public class Resume {
@@ -31,7 +33,7 @@ public class Resume {
     private String contentType;
 
     @Lob
-    @Column(columnDefinition = "BLOB", nullable = false)
+    @Column(columnDefinition = "MEDIUMBLOB", nullable = false)
     private byte[] fileData;
 
     private Boolean isActive = true;
@@ -40,6 +42,6 @@ public class Resume {
     @Column(updatable = false)
     private LocalDateTime uploadedAt;
 
-    @OneToOne(mappedBy = "resume", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "resume", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private ResumeAnalysis analysis;
 }

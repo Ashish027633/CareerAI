@@ -1,22 +1,11 @@
-import apiClient, { simulateDelay } from './client';
-import { MOCK_COMPANY_APPLICANTS } from '../../data/mock/applications';
-
+import apiClient from './client';
 export const companyService = {
   /**
    * Get company dashboard metrics
    */
   async getDashboardStats() {
-    await simulateDelay(250);
-    return {
-      success: true,
-      data: {
-        activeJobs: 8,
-        totalApplicants: MOCK_COMPANY_APPLICANTS.length + 37,
-        shortlisted: 18,
-        interviews: 9,
-        selected: 4,
-      },
-    };
+    const response = await apiClient.get('/company/dashboard/stats');
+    return response;
   },
 
   async getProfile() {

@@ -50,6 +50,9 @@ class InterviewControllerIntegrationTest {
     private ResumeRepository resumeRepository;
 
     @Autowired
+    private ResumeAnalysisRepository resumeAnalysisRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -64,6 +67,8 @@ class InterviewControllerIntegrationTest {
     void setUp() {
         interviewRepository.deleteAll();
         jobApplicationRepository.deleteAll();
+        resumeAnalysisRepository.deleteAll();
+        resumeRepository.deleteAll();
         jobRepository.deleteAll();
         companyProfileRepository.deleteAll();
         studentProfileRepository.deleteAll();

@@ -15,6 +15,7 @@ public class JobDto {
     private String jobType;
     private Double minCgpa;
     private List<String> requiredSkills;
+    private List<String> optionalSkills;
     private List<String> responsibilities;
     private List<String> benefits;
     private Boolean isActive;

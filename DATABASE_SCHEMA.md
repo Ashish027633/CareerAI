@@ -1,7 +1,12 @@
-# CareerAI Relational Database Schema Design (Phase 4 Target)
+# CareerAI Relational Database Schema Design (Phase 4A Updated)
 
 ## Overview
-Designed for MySQL 8+ / PostgreSQL with Spring Data JPA and Hibernate. All foreign keys, constraints, and audit fields are specified below.
+Designed for MySQL 8+ / PostgreSQL / H2 with Spring Data JPA and Hibernate. All foreign keys, constraints, and audit fields are specified below.
+
+**Phase 4 Status**: Database migration/configuration implemented. H2 regression verified. Live MySQL persistence verification pending due to unavailable local MySQL runtime.
+
+> [!WARNING]
+> **Schema Migration Limitation**: Hibernate `ddl-auto=update` is used as a temporary bootstrap mechanism for the initial rollout. This is NOT the final production schema migration strategy.
 
 ```mermaid
 erDiagram
@@ -39,7 +44,7 @@ erDiagram
 - `profile_completion_percentage` (INT, DEFAULT 0)
 - `headline` (VARCHAR(200))
 - `bio` (TEXT)
-- `skills` (JSON / ARRAY)
+- `skills` (TEXT)
 - `github_url` (VARCHAR(255))
 - `linkedin_url` (VARCHAR(255))
 - `portfolio_url` (VARCHAR(255))
@@ -59,22 +64,25 @@ erDiagram
 - `student_id` (BIGINT, FK -> student_profiles.id, NOT NULL)
 - `file_name` (VARCHAR(255), NOT NULL)
 - `file_size_bytes` (BIGINT, NOT NULL)
-- `file_url` (VARCHAR(500), NOT NULL)
+- `content_type` (VARCHAR(100), NOT NULL)
+- `file_data` (MEDIUMBLOB, NOT NULL)
 - `is_active` (BOOLEAN, DEFAULT TRUE)
 - `uploaded_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
 
-### 5. `resume_analyses`
+### 5. `resume_analyses` (Phase 3B Implemented)
 - `id` (BIGINT, PK, AUTO_INCREMENT)
 - `resume_id` (BIGINT, FK -> resumes.id, UNIQUE, NOT NULL)
-- `overall_score` (INT, NOT NULL)
-- `skills_score` (INT, NOT NULL)
-- `education_score` (INT, NOT NULL)
-- `projects_score` (INT, NOT NULL)
-- `experience_score` (INT, NOT NULL)
-- `formatting_score` (INT, NOT NULL)
-- `detected_skills` (JSON, NOT NULL)
-- `missing_skills` (JSON, NOT NULL)
-- `recommendations` (JSON, NOT NULL)
+- `overall_score` (INT, NOT NULL) -- 0-100 total CareerAI Readiness Score
+- `skills_score` (INT, NOT NULL, DEFAULT 0) -- max 25
+- `projects_score` (INT, NOT NULL, DEFAULT 0) -- max 20
+- `education_score` (INT, NOT NULL, DEFAULT 0) -- max 15
+- `experience_score` (INT, NOT NULL, DEFAULT 0) -- max 15
+- `certifications_score` (INT, NOT NULL, DEFAULT 0) -- max 10
+- `structure_score` (INT, NOT NULL, DEFAULT 0) -- max 10
+- `completeness_score` (INT, NOT NULL, DEFAULT 0) -- max 5
+- `completeness_percentage` (INT, NOT NULL, DEFAULT 0)
+- `page_count` (INT, NOT NULL, DEFAULT 1)
+- `raw_analysis_json` (LONGTEXT, NOT NULL) -- Stores losslessly serialized python analysis response
 - `analyzed_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
 
 ### 6. `jobs`
@@ -87,9 +95,9 @@ erDiagram
 - `job_type` (ENUM('Full-time', 'Internship', 'Contract', 'Remote'), NOT NULL)
 - `experience_level` (VARCHAR(50), NOT NULL)
 - `min_cgpa` (DECIMAL(3,2), DEFAULT 0.0)
-- `required_skills` (JSON, NOT NULL)
-- `responsibilities` (JSON)
-- `benefits` (JSON)
+- `required_skills` (TEXT, NOT NULL)
+- `responsibilities` (TEXT)
+- `benefits` (TEXT)
 - `is_active` (BOOLEAN, DEFAULT TRUE)
 - `created_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
 
@@ -102,6 +110,7 @@ erDiagram
 - `status` (ENUM('Applied', 'Under Review', 'Shortlisted', 'Interview', 'Selected', 'Rejected'), DEFAULT 'Applied')
 - `applied_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
 - `updated_at` (TIMESTAMP)
+- **Constraints**: UNIQUE(`student_id`, `job_id`) - CareerAI permits at most one application record ever per student and job.
 
 ### 8. `interviews`
 - `id` (BIGINT, PK, AUTO_INCREMENT)

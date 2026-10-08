@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "jobs")
+@Table(name = "jobs", indexes = {
+    @Index(name = "idx_job_company", columnList = "company_id"),
+    @Index(name = "idx_job_active", columnList = "is_active")
+})
 @Getter
 @Setter
 public class Job {
@@ -54,6 +57,10 @@ public class Job {
 
     @Convert(converter = StringListConverter.class)
     @Column(columnDefinition = "TEXT")
+    private List<String> optionalSkills = new ArrayList<>();
+
+    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "TEXT")
     private List<String> responsibilities = new ArrayList<>();
 
     @Convert(converter = StringListConverter.class)
@@ -66,6 +73,6 @@ public class Job {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "job", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<JobApplication> applications = new ArrayList<>();
 }

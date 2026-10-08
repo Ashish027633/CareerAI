@@ -15,22 +15,19 @@ export const ForgotPasswordPage = () => {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) return;
 
     setLoading(true);
-    try {
-      const res = await forgotPassword(email);
-      if (res.success) {
-        setMessage(res.message);
-        setSubmitted(true);
-        toast.success('Password reset link sent!');
-      }
-    } finally {
-      setLoading(false);
-    }
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 800));
+    setLoading(false);
+    
+    setError('Password recovery is currently unavailable until email service is configured.');
+    toast.error('Service unavailable');
   };
 
   return (
@@ -51,11 +48,20 @@ export const ForgotPasswordPage = () => {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4 text-left">
+              {error && (
+                <div className="mb-4 p-3 rounded-xl bg-danger/10 border border-danger/25 text-xs text-danger font-semibold">
+                  {error}
+                </div>
+              )}
+
               <Input
                 label="Registered Email"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setError('');
+                }}
                 placeholder="you@college.edu or recruiter@company.com"
                 icon={Mail}
                 required

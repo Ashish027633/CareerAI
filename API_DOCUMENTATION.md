@@ -1,13 +1,15 @@
-# CareerAI API Documentation (Phase 1 Contract & Phase 2 Roadmap)
+# CareerAI API Documentation (Phase 4 Database Configured)
+
+*(Phase 4 Status: Database migration/configuration implemented. H2 regression verified. Live MySQL persistence verification pending due to unavailable local MySQL runtime.)*
 
 ## Standard Response Format
-All endpoints will follow this response wrapper in Phase 2:
+All Spring Boot endpoints follow this standardized response wrapper:
 ```json
 {
   "success": true,
   "message": "Success message or error summary",
   "data": {},
-  "timestamp": "2026-10-07T14:05:00Z"
+  "timestamp": "2026-10-08T17:30:00Z"
 }
 ```
 
@@ -18,57 +20,40 @@ All endpoints will follow this response wrapper in Phase 2:
 - `POST /api/auth/logout`: Revokes refresh token and invalidates session.
 - `GET /api/auth/me`: Returns current authenticated principal.
 
-## 2. Resume & AI Endpoints (`/api/resumes`)
-- `POST /api/resumes/upload`: Multi-part PDF upload. Triggers parsing pipeline.
-- `GET /api/resumes/my-resume`: Retrieves currently active resume metadata & download URL.
-- `GET /api/resumes/analysis`: Retrieves comprehensive resume score, category scores (skills, education, projects, experience, certifications, formatting), detected skills, missing skills, and improvement recommendations.
-- `POST /api/resumes/reanalyze`: Triggers re-computation of ATS score and skill gaps.
+## 2. Resume & Resume Intelligence Endpoints (`/api/resumes`)
+- `POST /api/resumes/upload`: Multi-part PDF upload (max file size: 10MB). Deactivates previous active resumes for the student and stores the new active PDF in DB.
+- `GET /api/resumes/my-resume`: Retrieves currently active uploaded resume metadata.
+- `POST /api/resumes/analyze`: Triggers Python AI service parsing pipeline, extracts skills, sections, education, projects, experience, certifications, calculates 100-point CareerAI Resume Readiness Score, saves `ResumeAnalysis` in H2, and returns structured analysis.
+- `GET /api/resumes/analysis`: Retrieves the latest stored resume analysis from H2 for the authenticated student's active resume.
+
+## 2.5 Phase 3 AI Service (Python) Endpoints
+- `GET /health` or `GET /api/v1/health`: (Python AI Service) Returns basic health status `{"status": "UP"}`.
+- `GET /api/system/ai-health`: (Spring Boot) Diagnostic endpoint calling Python AI Service `/health`. Requires `ADMIN`.
+- `POST /api/v1/analyze-resume`: (Python AI Service) Internal multipart POST endpoint receiving PDF file bytes. Parses text, detects sections, normalizes skills via taxonomy, extracts education/projects/experience/certs, computes 100-pt score, and returns Pydantic `ResumeAnalysisResponse`.
+- `POST /api/v1/match-job`: (Python AI Service) Internal POST endpoint receiving unstructured resume text and job criteria. Computes Semantic Similarity, Required/Optional skill gaps, and returns Pydantic `JobMatchResponse` with AI Relevance Score (max 90).
 
 ## 3. Jobs Endpoints (`/api/jobs`)
-- `GET /api/jobs`: Lists active jobs with optional filtering (search query, location, jobType, minSalary, experience, skills, sort). Includes personalized `matchPercentage` for authenticated students.
-- `GET /api/jobs/:id`: Fetches detailed job description, responsibilities, required skills, eligibility, and candidate match breakdown (matched vs missing skills).
-- `POST /api/jobs`: (Company) Creates a new job posting.
-- `PUT /api/jobs/:id`: (Company/Admin) Updates job listing details.
-- `PATCH /api/jobs/:id/status`: (Company/Admin) Activates or pauses a job listing.
-- `DELETE /api/jobs/:id`: (Company/Admin) Deletes a job posting.
+- `GET /api/jobs`: Lists active jobs.
+- `GET /api/jobs/{id}`: Fetches detailed job description.
+- `GET /api/jobs/{id}/match`: (Student) Evaluates candidate eligibility and triggers AI service to calculate exact relevance match. Returns `JobMatchDto`.
+- `GET /api/jobs/recommended`: (Student) Returns list of eligible jobs dynamically ranked by Match Percentage (AI Relevance + Eligibility Contribution).
+- `POST /api/company/jobs`: (Company) Creates a new job posting.
+- `PUT /api/company/jobs/{id}`: (Company) Updates job listing details.
+- `DELETE /api/company/jobs/{id}`: (Company) Soft-deletes a job posting.
 
 ## 4. Application Endpoints (`/api/applications`)
-- `POST /api/applications`: Submits a student job application for a specific job ID.
-- `GET /api/applications/my`: Returns student's submitted applications with current status, timeline, and match scores.
-- `GET /api/applications/job/:jobId`: (Company) Retrieves ranked candidate applications for a specific job.
-- `PATCH /api/applications/:id/status`: (Company) Updates candidate status (`Applied`, `Under Review`, `Shortlisted`, `Interview`, `Selected`, `Rejected`).
+- `POST /api/jobs/{jobId}/apply`: Submits a student job application.
+- `GET /api/applications/my`: Returns student's submitted applications.
+- `GET /api/company/jobs/{jobId}/applicants`: (Company) Retrieves candidate applications for a job.
+- `PATCH /api/company/applications/{id}/status`: (Company) Updates candidate application status.
 
 ## 5. Interview Endpoints (`/api/interviews`)
 - `GET /api/interviews/my`: Returns upcoming and past interviews for the student.
-- `POST /api/interviews/schedule`: (Company) Schedules an interview round with date, time, format, and meeting link.
+- `GET /api/company/interviews`: (Company) Returns company interviews.
+- `POST /api/company/interviews`: (Company) Schedules an interview.
+- `DELETE /api/interviews/{id}`: (Company/Admin) Soft-cancels an interview.
 
 ## 6. Admin Endpoints (`/api/admin`)
-- `GET /api/admin/metrics`: Platform-wide aggregates (students, companies, jobs, applications, placement rate, monthly trends).
-- `GET /api/admin/students`: Directory of registered students with search/filter/status management.
-- `GET /api/admin/companies`: Directory of registered companies with approval & moderation controls.
-- `GET /api/admin/jobs`: Platform-wide job listing moderation.
-- `GET /api/admin/applications`: Platform-wide application ledger.
-
-## 7. Phase 2B Extensions (Implemented)
-- `GET /api/student/profile`: Returns `StudentProfileDto`. Requires `STUDENT` role.
-- `PUT /api/student/profile`: Updates `StudentProfileDto`.
-- `GET /api/company/profile`: Returns `CompanyProfileDto`. Requires `COMPANY` role.
-- `PUT /api/company/profile`: Updates `CompanyProfileDto`.
-- `GET /api/jobs`: Returns list of active `JobDto`.
-- `GET /api/jobs/{id}`: Returns specific `JobDto`.
-- `POST /api/company/jobs`: Creates a job.
-- `PUT /api/company/jobs/{id}`: Updates a job.
-- `DELETE /api/company/jobs/{id}`: Deletes a job.
-- `POST /api/jobs/{jobId}/apply`: Applies to a job.
-- `GET /api/applications/my`: Gets student's applications.
-- `GET /api/company/jobs/{jobId}/applicants`: Gets applicants for a job.
-- `PATCH /api/company/applications/{id}/status`: Updates application status.
-- `POST /api/company/interviews`: Schedules an interview.
-- `GET /api/interviews/my`: Gets student's interviews.
-- `GET /api/company/interviews`: Gets company's interviews.
-- `POST /api/resumes/upload`: Uploads a PDF resume.
-- `GET /api/resumes/my-resume`: Gets active resume.
-- `GET /api/notifications`: Gets notifications.
-- `PATCH /api/notifications/{id}/read`: Marks a notification as read.
-- `PATCH /api/notifications/read-all`: Marks all as read.
-- `GET /api/admin/metrics`: Gets overall DB metrics.
+- `GET /api/admin/metrics`: Platform-wide aggregates.
+- `GET /api/admin/students`: Directory of registered students.
+- `GET /api/admin/companies`: Directory of registered companies.

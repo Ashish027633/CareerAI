@@ -41,8 +41,19 @@ class JobControllerIntegrationTest {
 
     private String companyToken;
 
+    @Autowired
+    private com.careerai.domain.repository.JobApplicationRepository jobApplicationRepository;
+
+    @Autowired
+    private com.careerai.domain.repository.JobRepository jobRepository;
+
     @BeforeEach
     void setUp() {
+        jobApplicationRepository.deleteAll();
+        jobRepository.deleteAll();
+        companyProfileRepository.deleteAll();
+        userRepository.deleteAll();
+
         if (userRepository.findByEmail("testcompany@test.com").isEmpty()) {
             User user = new User();
             user.setEmail("testcompany@test.com");

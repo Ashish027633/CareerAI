@@ -46,7 +46,7 @@ export const LandingPage = () => {
             AI-POWERED PLACEMENT & RESUME ANALYZER
           </span>
           <span className="text-slate-dim">•</span>
-          <span className="text-burgundy font-bold text-[10px]">PHASE 1 PREVIEW</span>
+          <span className="text-burgundy font-bold text-[10px]">PRODUCTION</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-text max-w-4xl mx-auto leading-[1.08] animate-fade-up">
@@ -98,7 +98,7 @@ export const LandingPage = () => {
                   </span>
                 </div>
                 <p className="text-xs text-slate-muted mt-0.5">
-                  Illustrative Sample Profile: Ashish Sharma • Target: Backend Engineering & Distributed Systems
+                  Automated evaluation calibrated for software engineering & systems roles.
                 </p>
               </div>
             </div>
@@ -408,11 +408,11 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* 7. PLATFORM STATISTICS (Illustrative Demo Data) */}
+      {/* 7. PLATFORM STATISTICS */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
         <div className="mb-10">
           <span className="text-[11px] font-mono uppercase tracking-wider text-slate-muted bg-cream-soft px-3 py-1 rounded-full border border-border">
-            Illustrative Platform Metrics (Phase 1 Mock Simulation)
+            Platform Capabilities
           </span>
           <h3 className="text-2xl sm:text-3xl font-black text-slate-text mt-3 tracking-tight">
             Designed for Campus Scale
@@ -421,20 +421,20 @@ export const LandingPage = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div className="bg-white border border-border rounded-2xl p-6 shadow-card">
-            <p className="text-3xl sm:text-4xl font-black text-burgundy font-mono">1,400+</p>
-            <p className="text-xs text-slate-muted font-medium mt-1">Simulated Student Records</p>
+            <p className="text-3xl sm:text-4xl font-black text-burgundy font-mono">100+</p>
+            <p className="text-xs text-slate-muted font-medium mt-1">Data Points Analyzed</p>
           </div>
           <div className="bg-white border border-border rounded-2xl p-6 shadow-card">
-            <p className="text-3xl sm:text-4xl font-black text-burgundy font-mono">82%</p>
-            <p className="text-xs text-slate-muted font-medium mt-1">Average ATS Benchmark</p>
+            <p className="text-3xl sm:text-4xl font-black text-burgundy font-mono">0</p>
+            <p className="text-xs text-slate-muted font-medium mt-1">Manual Screening Time</p>
           </div>
           <div className="bg-white border border-border rounded-2xl p-6 shadow-card">
-            <p className="text-3xl sm:text-4xl font-black text-burgundy font-mono">48+</p>
-            <p className="text-xs text-slate-muted font-medium mt-1">Partner Hiring Roles</p>
+            <p className="text-3xl sm:text-4xl font-black text-burgundy font-mono">24/7</p>
+            <p className="text-xs text-slate-muted font-medium mt-1">Application Tracking</p>
           </div>
           <div className="bg-white border border-border rounded-2xl p-6 shadow-card">
             <p className="text-3xl sm:text-4xl font-black text-burgundy font-mono">100%</p>
-            <p className="text-xs text-slate-muted font-medium mt-1">Phase 1 Frontend Prototype</p>
+            <p className="text-xs text-slate-muted font-medium mt-1">ATS Transparency</p>
           </div>
         </div>
       </section>
@@ -446,7 +446,7 @@ export const LandingPage = () => {
             Ready to Accelerate Your Placement Drive?
           </h2>
           <p className="mt-4 text-sm sm:text-base text-cream/90 max-w-xl mx-auto leading-relaxed">
-            Experience the complete Phase 1 frontend interface across Student, Company Recruiter, and University Administrator console workflows.
+            Experience the complete intelligent placement platform for universities and enterprise recruiters.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
             <Link to="/register" className="w-full sm:w-auto">
@@ -456,7 +456,7 @@ export const LandingPage = () => {
             </Link>
             <Link to="/login" className="w-full sm:w-auto">
               <Button variant="outline" size="lg" className="w-full sm:w-auto border-white/40 text-white hover:bg-white/10 hover:text-white">
-                Launch Demo Login
+                Sign In
               </Button>
             </Link>
           </div>

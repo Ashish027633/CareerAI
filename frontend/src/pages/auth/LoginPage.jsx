@@ -119,8 +119,8 @@ export const LoginPage = () => {
           </div>
 
           <div className="relative z-10 pt-4 border-t border-border/80 flex items-center justify-between text-xs text-slate-muted">
-            <span className="font-medium">Phase 1 Frontend Prototype</span>
-            <span className="font-mono text-[11px] font-semibold text-burgundy">v1.2.0</span>
+            <span className="font-medium">CareerAI Platform</span>
+            <span className="font-mono text-[11px] font-semibold text-burgundy">Production</span>
           </div>
         </div>
 
@@ -132,46 +132,48 @@ export const LoginPage = () => {
                 Sign in to your account
               </h3>
               <p className="text-xs sm:text-sm text-slate-muted mt-1">
-                Enter your university credentials or select a quick demo profile.
+                Enter your university or employer credentials to continue.
               </p>
             </div>
 
-            {/* Quick Demo Preset Tabs */}
-            <div className="mb-6 p-1 bg-cream-soft rounded-xl border border-border flex gap-1">
-              <button
-                type="button"
-                onClick={() => handleRoleQuickSelect('student')}
-                className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                  selectedRole === 'student'
-                    ? 'bg-burgundy text-white shadow-wine'
-                    : 'text-slate-muted hover:text-slate-text'
-                }`}
-              >
-                Student Demo
-              </button>
-              <button
-                type="button"
-                onClick={() => handleRoleQuickSelect('company')}
-                className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                  selectedRole === 'company'
-                    ? 'bg-burgundy text-white shadow-wine'
-                    : 'text-slate-muted hover:text-slate-text'
-                }`}
-              >
-                Company Demo
-              </button>
-              <button
-                type="button"
-                onClick={() => handleRoleQuickSelect('admin')}
-                className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                  selectedRole === 'admin'
-                    ? 'bg-burgundy text-white shadow-wine'
-                    : 'text-slate-muted hover:text-slate-text'
-                }`}
-              >
-                Admin Demo
-              </button>
-            </div>
+            {/* Quick Developer Preset Tabs */}
+            {import.meta.env.DEV && (
+              <div className="mb-6 p-1 bg-cream-soft rounded-xl border border-border flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => handleRoleQuickSelect('student')}
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                    selectedRole === 'student'
+                      ? 'bg-burgundy text-white shadow-wine'
+                      : 'text-slate-muted hover:text-slate-text'
+                  }`}
+                >
+                  Student (DEV)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleRoleQuickSelect('company')}
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                    selectedRole === 'company'
+                      ? 'bg-burgundy text-white shadow-wine'
+                      : 'text-slate-muted hover:text-slate-text'
+                  }`}
+                >
+                  Company (DEV)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleRoleQuickSelect('admin')}
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                    selectedRole === 'admin'
+                      ? 'bg-burgundy text-white shadow-wine'
+                      : 'text-slate-muted hover:text-slate-text'
+                  }`}
+                >
+                  Admin (DEV)
+                </button>
+              </div>
+            )}
 
             {error && (
               <div className="mb-4 p-3 rounded-xl bg-danger/10 border border-danger/25 text-xs text-danger font-semibold">
@@ -303,7 +305,7 @@ export const LoginPage = () => {
               </h4>
             </div>
             <p className="text-xs text-slate-muted leading-relaxed mb-5">
-              Google authentication will be connected during backend integration. For Phase 1 testing, use the instant demo role tabs (Student, Company, or Admin) or email credentials.
+              Google OAuth authentication is pending production configuration. Please use email credentials.
             </p>
             <div className="flex justify-end">
               <Button

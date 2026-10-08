@@ -1,12 +1,4 @@
-import apiClient, { simulateDelay } from './client';
-import {
-  MOCK_ADMIN_METRICS,
-  MOCK_ADMIN_STUDENTS,
-  MOCK_ADMIN_COMPANIES,
-} from '../../data/mock/adminMetrics';
-
-let studentsList = [...MOCK_ADMIN_STUDENTS];
-let companiesList = [...MOCK_ADMIN_COMPANIES];
+import apiClient from './client';
 
 export const adminService = {
   /**
@@ -14,13 +6,9 @@ export const adminService = {
    */
   async getMetrics() {
     const response = await apiClient.get('/admin/metrics');
-    // Map backend DTO to frontend format if necessary
-    // Backend returns: totalStudents, totalCompanies, totalJobs, activeJobs, totalApplications, placementRate
-    // Frontend expects: totalStudents, totalCompanies, totalJobs, activeJobs, applications, placementRate, monthlyTrends
     if (response && response.data) {
-      // Mock monthly trends since backend doesn't provide it yet
-      response.data.monthlyTrends = MOCK_ADMIN_METRICS.monthlyTrends; 
-      response.data.applications = response.data.totalApplications; // map property
+      response.data.applications = response.data.totalApplications || 0;
+      response.data.monthlyTrends = []; 
     }
     return response;
   },

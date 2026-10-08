@@ -68,7 +68,7 @@ export const ResumeScoreCard = ({
               {verdict}
             </h3>
             <p className="text-xs text-slate-muted mt-1 leading-relaxed">
-              Standardized evaluation calibrated for university engineering placement benchmarks (Demo Profile).
+              Standardized evaluation calibrated for university engineering placement benchmarks.
             </p>
           </div>
         </div>

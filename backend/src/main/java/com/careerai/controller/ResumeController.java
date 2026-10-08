@@ -1,6 +1,7 @@
 package com.careerai.controller;
 
 import com.careerai.common.dto.ApiResponse;
+import com.careerai.dto.ResumeAnalysisDto;
 import com.careerai.dto.ResumeDto;
 import com.careerai.service.ResumeService;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +28,16 @@ public class ResumeController {
     public ResponseEntity<ApiResponse<ResumeDto>> getMyResume() {
         return ResponseEntity.ok(ApiResponse.success("Resume retrieved successfully", resumeService.getMyResume()));
     }
-    
+
     @PostMapping("/analyze")
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<ApiResponse<Object>> analyzeResume() {
-        return ResponseEntity.ok(ApiResponse.success("Resume analysis is not yet available. AI/ML is planned for Phase 3.", null));
+    public ResponseEntity<ApiResponse<ResumeAnalysisDto>> analyzeResume() {
+        return ResponseEntity.ok(ApiResponse.success("Resume analysis completed successfully", resumeService.analyzeResume()));
+    }
+
+    @GetMapping("/analysis")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<ApiResponse<ResumeAnalysisDto>> getLatestAnalysis() {
+        return ResponseEntity.ok(ApiResponse.success("Latest resume analysis retrieved successfully", resumeService.getLatestAnalysis()));
     }
 }

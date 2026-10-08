@@ -3,6 +3,7 @@ package com.careerai.controller;
 import com.careerai.common.dto.ApiResponse;
 import com.careerai.dto.JobDto;
 import com.careerai.service.JobService;
+import com.careerai.service.JobMatchingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +17,7 @@ import java.util.List;
 public class JobController {
 
     private final JobService jobService;
+    private final JobMatchingService jobMatchingService;
 
     @GetMapping("/jobs")
     public ResponseEntity<ApiResponse<List<JobDto>>> getAllActiveJobs() {
@@ -25,6 +27,18 @@ public class JobController {
     @GetMapping("/jobs/{id}")
     public ResponseEntity<ApiResponse<JobDto>> getJobById(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success("Job retrieved successfully", jobService.getJobById(id)));
+    }
+
+    @GetMapping("/jobs/{id}/match")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<ApiResponse<com.careerai.dto.JobMatchDto>> getJobMatch(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success("Job match computed successfully", jobMatchingService.getJobMatch(id)));
+    }
+
+    @GetMapping("/jobs/recommended")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<ApiResponse<List<com.careerai.dto.JobMatchDto>>> getRecommendedJobs() {
+        return ResponseEntity.ok(ApiResponse.success("Recommended jobs retrieved successfully", jobMatchingService.getRecommendedJobs()));
     }
 
     @GetMapping("/company/jobs")

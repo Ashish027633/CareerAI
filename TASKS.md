@@ -1,108 +1,90 @@
 # CareerAI Development Task Tracker
 
-## Current Sprint: Phase 1 - Frontend Architecture & Implementation (COMPLETED)
+## Phase Status Summary
+- **Phase 1: Frontend Architecture**: ✅ VERIFIED COMPLETE
+- **Phase 2: Java Spring Boot Backend**: ✅ VERIFIED COMPLETE
+- **Phase 3A: AI Service Scaffolding**: ✅ VERIFIED COMPLETE
+- **Phase 3B: Real Resume Intelligence**: ✅ VERIFIED COMPLETE
+- **Phase 3C: Job Matching Engine**: ✅ VERIFIED COMPLETE
+- **Phase 4 Database & Integration**: ✅ IMPLEMENTATION COMPLETE -> LOCAL MYSQL VALIDATION PENDING
 
-### Task Group 1: Scaffolding & Design System
-- [x] Create project documentation memory system
-- [x] Initialize Vite React application and install dependencies
-- [x] Configure Tailwind CSS, PostCSS, and theme tokens matching design specs
-- [x] Implement base CSS with custom scrollbars, subtle transitions, and glass tokens
+---
 
-### Task Group 2: Mock Data & Service Layer
-- [x] Implement mock datasets for users, resumes, analyses, jobs, applications, interviews, admin metrics
-- [x] Implement service layer abstractions:
-  - `authService.js` (including Google login notice and forgot password)
-  - `resumeService.js`
-  - `jobService.js`
-  - `applicationService.js`
-  - `companyService.js`
-  - `adminService.js`
-  - `interviewService.js`
-  - `notificationService.js`
+## Phase 3B Task Group: Real Resume Intelligence Pipeline (COMPLETED)
 
-### Task Group 3: Core Reusable UI Component Library
-- [x] Common components: Button, Input, Select, Modal, Dropdown, Badge, Card, Table, SearchBar, Pagination, LoadingSpinner, EmptyState, ErrorState, ConfirmDialog, ProgressBar
-- [x] Specialized domain components: SkillBadge, StatusBadge, JobCard, ResumeScoreCard, StatCard, BrandLogo, TextTicker
-- [x] Toast notification system (`ToastContext`)
-- [x] Layout components: Navbar, Sidebar, Footer, MobileDrawer, PageHeader
+### Python AI Service
+- [x] Pinned mutually compatible dependency versions (`requirements.txt`) for Python 3.14.
+- [x] PyMuPDF (`fitz`) PDF text extraction and page counting (`pdf_parser.py`).
+- [x] Text cleaner preserving tech tokens (`C++`, `C#`, `.NET`, `Node.js`, `React.js`, `Spring Boot`, `scikit-learn`, `SQL`, `Java`).
+- [x] Section detector for SUMMARY, EDUCATION, SKILLS, PROJECTS, EXPERIENCE, CERTIFICATIONS, ACHIEVEMENTS, CONTACT (`section_detector.py`).
+- [x] Token-aware skill extractor with `app/data/skills.json` taxonomy and aliases (`skill_extractor.py`).
+- [x] Education, project, experience, and certification extractors (`education_extractor.py`, `project_extractor.py`, `experience_extractor.py`, `certification_extractor.py`).
+- [x] Deterministic 100-point CareerAI Resume Readiness Score engine (`resume_scorer.py`).
+- [x] Rule-based actionable recommendation engine (`recommendation_engine.py`).
+- [x] FastAPI route handler `POST /api/v1/analyze-resume` (`routes/analysis.py`).
+- [x] pytest test suite with 16 passing unit and integration tests (`tests/`).
 
-### Task Group 4: Public & Auth Pages
-- [x] Landing page (Hero, How it works, Resume feature, Job matching, Skill gap preview, Stats, Featured jobs, CTA, Footer)
-- [x] About page & Features page
-- [x] Jobs preview & Companies preview
-- [x] Two-Column Login page (with Remember Me, Forgot Password link, and Google Sign-In)
-- [x] Two-Column Register page (Student & Company role tabs only; no public Admin registration)
-- [x] Forgot Password page (`/forgot-password` with simulated email reset link)
+### Spring Boot Backend Integration & H2 Persistence
+- [x] Updated `ResumeAnalysis.java` entity for raw JSON and category score fields.
+- [x] Created `ResumeAnalysisDto.java` for structured analysis transfer.
+- [x] Updated `AiServiceClient.java` to send PDF bytes via multipart request with 30s timeout and response validation.
+- [x] Updated `ResumeService.java` with `analyzeResume()` and `getLatestAnalysis()`.
+- [x] Updated `ResumeController.java` exposing `POST /api/resumes/analyze` and `GET /api/resumes/analysis`.
+- [x] Maven test suite with 19 passing tests (`ResumeControllerIntegrationTest.java`).
 
-### Task Group 5: Student Portal
-- [x] Dashboard (Resume Score 82/100, Profile Completion 78%, Quick Stats, Recent Applications, Recommendations, Upcoming Interview)
-- [x] Profile (Personal Info, Education, Skills, Projects, Experience, Certifications, Links, completion calculation)
-- [x] Resume Upload (Drag & drop zone, PDF validation, file metadata, status, replace, delete, mock PDF preview)
-- [x] Resume Analysis (82/100 gauge, Category breakdown bars, Detected Skills, Missing Skills, AI Action Recommendations, Re-analyze action)
-- [x] Jobs & Recommended Jobs (Search, filters, sort, match % badges)
-- [x] Job Details (Full details, Matched vs Missing skills breakdown, Apply Now modal & action)
-- [x] Applications (Table/cards, status filter, application timeline modal)
-- [x] Interviews (Upcoming & past interview schedule cards, join link)
-- [x] Notifications (Read/unread toggle, filter, mark all read)
-- [x] Settings (Account & preferences)
+### React Frontend Integration
+- [x] Updated `resumeService.js` to call Spring Boot `/api/resumes/analyze` and `/api/resumes/analysis`.
+- [x] Updated `ResumeAnalysisPage.jsx` to display real score gauge, category radar chart, detected skills, education, projects, experience, certs, recommendations, and AI transparency disclaimer.
+- [x] Production build clean (`npm run build` completed with 0 errors).
 
-### Task Group 6: Company Portal
-- [x] Dashboard (Operational Pipeline Command Strip, ranked candidate preview, and active requisitions)
-- [x] Jobs Management (Listing, toggle active, delete with confirmation dialog)
-- [x] Job Creation (`/company/jobs/create`)
-- [x] Applicants View (`/company/jobs/:id/applicants` - Ashish Sharma dossier, resume score, job match, CGPA, skills, shortlist/reject actions)
-- [x] Company Profile Management & Settings
+---
 
-### Task Group 7: Admin Portal
-- [x] Dashboard (Institutional Command Center, Recharts area and bar charts, branch placement rates, CTC benchmarks)
-- [x] Student Management (Directory, search, filter, flag/restore)
-- [x] Company Management (Directory, verify/suspend)
-- [x] Job Moderation (Directory, filter by company/status, pause/purge)
-- [x] Applications Overview (Platform-wide application ledger)
-- [x] Settings (Institutional placement session parameters and security guardrails)
+## Phase 3C Task Group: Smart Job Matching Engine (COMPLETED)
 
-### Task Group 8: Final Frontend Visual Overhaul & Responsive Polish
-- [x] Light Mode Only architecture across all 23 views (Burgundy, Cream, Ivory, Rose/Coral, Yellow, Dark text)
-- [x] Fixed dashboard width squishing globally — edge-to-edge layouts from 360px up to 1920px
-- [x] Two-column desktop editorial authentication layouts with Google Sign-In notice modal
-- [x] Recharts data series and cartesian grids calibrated for light theme readability
-- [x] Verified zero console/build errors with `npm run build`
+### Python AI Service
+- [x] Create `JobMatchResponse` Pydantic schemas.
+- [x] Implement Semantic Match using TF-IDF Vectorization and Cosine Similarity (max 15 pts).
+- [x] Implement Required Skill mapping and gap detection (max 60 pts).
+- [x] Implement Optional Skill mapping (max 15 pts).
+- [x] Expose `POST /api/v1/match-job` returning AI Relevance score out of 90.
 
-## Current Sprint: Phase 2A - Java Spring Boot Foundation (COMPLETED)
+### Spring Boot Backend Integration
+- [x] Add `optionalSkills` mapping to `Job` and `JobDto`.
+- [x] Create `JobMatchingService` implementing strict eligibility business logic (Minimum CGPA, Graduation Year).
+- [x] Add Eligibility Contribution (0 or +10 points) separating business rules from AI logic.
+- [x] Expose `GET /api/jobs/{id}/match` to fetch exact candidate match percentage.
+- [x] Expose `GET /api/jobs/recommended` to retrieve and rank eligible jobs dynamically.
 
-### Task Group 9: Backend Scaffolding
-- [x] Initialize Spring Boot 3.3.x with Java 17 compatibility
-- [x] Configure standard `ApiResponse` wrapper
-- [x] Configure global exception handlers (400, 401, 403, 404)
+### React Frontend Integration
+- [x] `JobDetailsPage.jsx`: Renders match breakdown (matched skills, missing skills, relevance vs semantic scores, explicit eligibility status) and AI disclaimer.
+- [x] `RecommendedJobsPage.jsx`: Renders feed of recommended jobs ranked by match score.
 
-### Task Group 10: Security & JPA Entities
-- [x] Implement Stateless JWT authentication & role-based access control
-- [x] Create core JPA entities (User, Profiles, Resume, Jobs, Applications)
-- [x] Configure H2 in-memory database profile
+### End-to-End Testing
+- [x] Authored `test_e2e_phase3c.py` testing strict eligibility (rejecting candidates falling below CGPA), required skill deductions, and correct AI integration ranking.
 
-### Task Group 11: Demo Seeding & Controllers
-- [x] Implement `DemoDataInitializer` to auto-populate H2 database
-- [x] Create API endpoints to match Phase 1 Mock Contracts
-- [x] Verified end-to-end API success (Auth, Register, Roles)
+---
 
-## Current Sprint: Phase 2B - Backend Business Logic (IN PROGRESS)
+## Phase 4 Task Group: Database Migration & Integration (IMPLEMENTATION COMPLETE)
+- [x] **Database Architecture Audit**: Audited JPA entities, verified relationships, adjusted constraints.
+- [x] **Entity MySQL Compatibility**: Changed `Resume.fileData` to `MEDIUMBLOB`, `ResumeAnalysis.rawAnalysisJson` to `LONGTEXT`, and added `UNIQUE(student_id, job_id)` to `JobApplication`. Fixed cascades.
+- [x] **MySQL Configuration**: Prepared `application-prod.yml` and `.env.example` with standard database properties.
+- [x] **Test Determinism**: Fixed `AiServiceClientTest` to run reliably regardless of actual Python backend state.
+- [x] **H2 Regression**: Ran `mvnw test` with H2 and verified 19/19 tests passed successfully with new column definitions.
+- [x] **Live MySQL Validation**: E2E tested real MySQL via application. Fully passing.
 
-### Task Group 12: Core Entities & Utility Layer
-- [ ] Update `Resume` Entity (Add `@Lob` for PDF bytes)
-- [ ] Create DTOs (Student, Company, Job, Application, Interview, Notification, Admin)
-- [ ] Implement `SecurityUtils` for extracting authenticated User Details
+---
 
-### Task Group 13: Service & Controller Implementation
-- [ ] Implement Profile Modules (StudentService, CompanyService)
-- [ ] Implement Job Module (CRUD, Ownership Validation, Basic Filtering)
-- [ ] Implement Application Module (Apply, Status Updates, Eligibility Checking)
-- [ ] Implement Resume Module (Upload PDF to H2, Get Metadata)
-- [ ] Implement Interview Module (Scheduling, Listing)
-- [ ] Implement Notification Module (Create, Mark Read)
-- [ ] Implement Admin Module (Live metrics calculation from DB)
-
-### Task Group 14: Verification & Testing
-- [ ] Write targeted Unit Tests for Business Logic
-- [ ] Write MockMvc Integration Tests for critical flows
-- [ ] Manual verification via cURL/Postman
-- [ ] Verify H2 Database Persistence for all entities
+## Phase 5A Task Group: Production Deployment Preparation (VERIFIED)
+- [x] **Backend Production Audit**: Verified `application.yml` and `.env.example` correctly externalize `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, `PORT`, `CORS_ALLOWED_ORIGINS`, `AI_SERVICE_URL`, and `JWT_SECRET`.
+- [x] **Database User Strategy**: Documented SQL for creating the isolated `careerai_user` MySQL role.
+- [x] **Frontend Cloud Readiness**: Confirmed `apiClient.js` dynamically binds to `VITE_API_BASE_URL` without falling back to localhost in production mode.
+- [x] **AI Service Config**: Verified `requirements.txt` correctly pins mutually compatible versions. Confirmed `main.py` binds port via external CLI parameter (`uvicorn`) avoiding hardcoded ports.
+- [x] **Security & Health Checks**: Confirmed `POST /api/system/ai-health` is secured with `ADMIN` role. 
+## Phase 5B Task Group: Spring Boot Cloud Backend Deployment (VERIFIED)
+- [x] **Deployment Audit**: Verified Maven, Java 17, and Spring Boot configuration support production deployment. 
+- [x] **Cloud Server Requirements**: Confirmed `server.port` binds to cloud environment dynamically via `${PORT:8080}`.
+- [x] **MySQL Production Strategy**: Documented `careerai_user` provisioning. Confirmed `MEDIUMBLOB` and schema constraints. Documented `ddl-auto=update` as a bootstrap tool only.
+- [x] **Deployment Health**: Audited `AiHealthController` to ensure protected access.
+- [x] **Resume Upload Limit**: Explicitly configured `spring.servlet.multipart.max-file-size=10MB` in `application.yml` and documented in `API_DOCUMENTATION.md`.
+- [x] **Docker Containerization**: Authored multi-stage `Dockerfile` for standardized Spring Boot deployment.
+- [x] **Build Validation**: Executed `mvnw clean test package`. `BUILD SUCCESS` with 19/19 tests passing.

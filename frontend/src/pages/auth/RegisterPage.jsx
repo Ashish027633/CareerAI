@@ -149,7 +149,7 @@ export const RegisterPage = () => {
 
           <div className="relative z-10 pt-4 border-t border-border/80 flex items-center justify-between text-xs text-slate-muted">
             <span className="font-medium">No credit card required</span>
-            <span className="font-mono text-[11px] font-semibold text-burgundy">Phase 1 Demo</span>
+            <span className="font-mono text-[11px] font-semibold text-burgundy">CareerAI</span>
           </div>
         </div>
 
@@ -456,7 +456,7 @@ export const RegisterPage = () => {
               </h4>
             </div>
             <p className="text-xs text-slate-muted leading-relaxed mb-5">
-              Google authentication will be connected during backend integration. For Phase 1, registration operates via the interactive form fields above.
+              Google OAuth authentication is pending production configuration. Please use email credentials for registration.
             </p>
             <div className="flex justify-end">
               <Button

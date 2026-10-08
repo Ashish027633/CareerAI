@@ -1,0 +1,287 @@
+[
+  {
+    "canonical": "Python",
+    "category": "Programming",
+    "aliases": ["python", "py"]
+  },
+  {
+    "canonical": "Java",
+    "category": "Programming",
+    "aliases": ["java", "jdk", "j2ee"]
+  },
+  {
+    "canonical": "C++",
+    "category": "Programming",
+    "aliases": ["c++", "cpp"]
+  },
+  {
+    "canonical": "C",
+    "category": "Programming",
+    "aliases": ["c"]
+  },
+  {
+    "canonical": "C#",
+    "category": "Programming",
+    "aliases": ["c#", "c-sharp", "csharp"]
+  },
+  {
+    "canonical": "JavaScript",
+    "category": "Programming",
+    "aliases": ["javascript", "js"]
+  },
+  {
+    "canonical": "TypeScript",
+    "category": "Programming",
+    "aliases": ["typescript", "ts"]
+  },
+  {
+    "canonical": "Go",
+    "category": "Programming",
+    "aliases": ["golang", "go"]
+  },
+  {
+    "canonical": "Rust",
+    "category": "Programming",
+    "aliases": ["rust"]
+  },
+  {
+    "canonical": "PHP",
+    "category": "Programming",
+    "aliases": ["php"]
+  },
+  {
+    "canonical": "Ruby",
+    "category": "Programming",
+    "aliases": ["ruby"]
+  },
+  {
+    "canonical": "Kotlin",
+    "category": "Programming",
+    "aliases": ["kotlin"]
+  },
+  {
+    "canonical": "Swift",
+    "category": "Programming",
+    "aliases": ["swift"]
+  },
+  {
+    "canonical": "React",
+    "category": "Frontend",
+    "aliases": ["react", "react.js", "reactjs", "react native"]
+  },
+  {
+    "canonical": "Angular",
+    "category": "Frontend",
+    "aliases": ["angular", "angularjs", "angular.js"]
+  },
+  {
+    "canonical": "Vue.js",
+    "category": "Frontend",
+    "aliases": ["vue", "vue.js", "vuejs"]
+  },
+  {
+    "canonical": "Next.js",
+    "category": "Frontend",
+    "aliases": ["next.js", "nextjs", "next"]
+  },
+  {
+    "canonical": "HTML5",
+    "category": "Frontend",
+    "aliases": ["html", "html5"]
+  },
+  {
+    "canonical": "CSS3",
+    "category": "Frontend",
+    "aliases": ["css", "css3"]
+  },
+  {
+    "canonical": "Tailwind CSS",
+    "category": "Frontend",
+    "aliases": ["tailwind", "tailwindcss", "tailwind css"]
+  },
+  {
+    "canonical": "Bootstrap",
+    "category": "Frontend",
+    "aliases": ["bootstrap"]
+  },
+  {
+    "canonical": "Spring Boot",
+    "category": "Backend",
+    "aliases": ["spring boot", "springboot", "spring-boot", "spring framework", "spring"]
+  },
+  {
+    "canonical": "Node.js",
+    "category": "Backend",
+    "aliases": ["node.js", "nodejs", "node"]
+  },
+  {
+    "canonical": "Express.js",
+    "category": "Backend",
+    "aliases": ["express", "express.js", "expressjs"]
+  },
+  {
+    "canonical": "FastAPI",
+    "category": "Backend",
+    "aliases": ["fastapi", "fast api"]
+  },
+  {
+    "canonical": "Django",
+    "category": "Backend",
+    "aliases": ["django"]
+  },
+  {
+    "canonical": "Flask",
+    "category": "Backend",
+    "aliases": ["flask"]
+  },
+  {
+    "canonical": ".NET",
+    "category": "Backend",
+    "aliases": [".net", "asp.net", "dotnet"]
+  },
+  {
+    "canonical": "REST API",
+    "category": "Backend",
+    "aliases": ["rest api", "restful api", "restful", "rest"]
+  },
+  {
+    "canonical": "GraphQL",
+    "category": "Backend",
+    "aliases": ["graphql"]
+  },
+  {
+    "canonical": "MySQL",
+    "category": "Database",
+    "aliases": ["mysql"]
+  },
+  {
+    "canonical": "PostgreSQL",
+    "category": "Database",
+    "aliases": ["postgresql", "postgres", "psql"]
+  },
+  {
+    "canonical": "MongoDB",
+    "category": "Database",
+    "aliases": ["mongodb", "mongo"]
+  },
+  {
+    "canonical": "SQLite",
+    "category": "Database",
+    "aliases": ["sqlite", "sqlite3"]
+  },
+  {
+    "canonical": "Oracle DB",
+    "category": "Database",
+    "aliases": ["oracle", "oracle db"]
+  },
+  {
+    "canonical": "Redis",
+    "category": "Database",
+    "aliases": ["redis"]
+  },
+  {
+    "canonical": "SQL",
+    "category": "Database",
+    "aliases": ["sql"]
+  },
+  {
+    "canonical": "Machine Learning",
+    "category": "AI/ML",
+    "aliases": ["machine learning", "ml"]
+  },
+  {
+    "canonical": "Deep Learning",
+    "category": "AI/ML",
+    "aliases": ["deep learning", "dl"]
+  },
+  {
+    "canonical": "NLP",
+    "category": "AI/ML",
+    "aliases": ["nlp", "natural language processing"]
+  },
+  {
+    "canonical": "TensorFlow",
+    "category": "AI/ML",
+    "aliases": ["tensorflow", "tf"]
+  },
+  {
+    "canonical": "PyTorch",
+    "category": "AI/ML",
+    "aliases": ["pytorch"]
+  },
+  {
+    "canonical": "Scikit-learn",
+    "category": "AI/ML",
+    "aliases": ["scikit-learn", "sklearn", "scikit learn"]
+  },
+  {
+    "canonical": "Pandas",
+    "category": "AI/ML",
+    "aliases": ["pandas"]
+  },
+  {
+    "canonical": "NumPy",
+    "category": "AI/ML",
+    "aliases": ["numpy"]
+  },
+  {
+    "canonical": "OpenCV",
+    "category": "AI/ML",
+    "aliases": ["opencv"]
+  },
+  {
+    "canonical": "AWS",
+    "category": "Cloud/DevOps",
+    "aliases": ["aws", "amazon web services", "ec2", "s3"]
+  },
+  {
+    "canonical": "Azure",
+    "category": "Cloud/DevOps",
+    "aliases": ["azure", "microsoft azure"]
+  },
+  {
+    "canonical": "GCP",
+    "category": "Cloud/DevOps",
+    "aliases": ["gcp", "google cloud", "google cloud platform"]
+  },
+  {
+    "canonical": "Docker",
+    "category": "Cloud/DevOps",
+    "aliases": ["docker"]
+  },
+  {
+    "canonical": "Kubernetes",
+    "category": "Cloud/DevOps",
+    "aliases": ["kubernetes", "k8s"]
+  },
+  {
+    "canonical": "Git",
+    "category": "Tools & DevOps",
+    "aliases": ["git", "github", "gitlab"]
+  },
+  {
+    "canonical": "CI/CD",
+    "category": "Tools & DevOps",
+    "aliases": ["ci/cd", "github actions", "jenkins"]
+  },
+  {
+    "canonical": "Linux",
+    "category": "Tools & DevOps",
+    "aliases": ["linux", "ubuntu", "bash"]
+  },
+  {
+    "canonical": "Power BI",
+    "category": "Data",
+    "aliases": ["power bi", "powerbi"]
+  },
+  {
+    "canonical": "Tableau",
+    "category": "Data",
+    "aliases": ["tableau"]
+  },
+  {
+    "canonical": "Apache Spark",
+    "category": "Data",
+    "aliases": ["spark", "pyspark", "apache spark"]
+  }
+]

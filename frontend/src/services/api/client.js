@@ -1,8 +1,18 @@
 import axios from 'axios';
 
-// Base Axios instance configured for future Spring Boot REST API (Phase 2)
+const getBaseUrl = () => {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  if (import.meta.env.DEV) {
+    return 'http://localhost:8080/api';
+  }
+  throw new Error("CRITICAL CONFIGURATION ERROR: VITE_API_BASE_URL environment variable is missing in production.");
+};
+
+// Base Axios instance configured for Spring Boot REST API
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
+  baseURL: getBaseUrl(),
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

@@ -94,6 +94,7 @@ public class JobService {
             job.setMinCgpa(java.math.BigDecimal.valueOf(dto.getMinCgpa()));
         }
         job.setRequiredSkills(dto.getRequiredSkills() != null ? dto.getRequiredSkills() : List.of());
+        job.setOptionalSkills(dto.getOptionalSkills() != null ? dto.getOptionalSkills() : List.of());
         job.setResponsibilities(dto.getResponsibilities() != null ? dto.getResponsibilities() : List.of());
         job.setBenefits(dto.getBenefits() != null ? dto.getBenefits() : List.of());
     }
@@ -129,6 +130,7 @@ public class JobService {
         dto.setJobType(job.getJobType().name());
         dto.setMinCgpa(job.getMinCgpa() != null ? job.getMinCgpa().doubleValue() : 0.0);
         dto.setRequiredSkills(job.getRequiredSkills());
+        dto.setOptionalSkills(job.getOptionalSkills());
         dto.setResponsibilities(job.getResponsibilities());
         dto.setBenefits(job.getBenefits());
         dto.setIsActive(job.getIsActive());

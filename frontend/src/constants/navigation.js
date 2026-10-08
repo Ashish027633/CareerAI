@@ -4,7 +4,7 @@ export const STUDENT_NAV = [
   { name: 'My Resume', path: '/student/resume', icon: 'FileText' },
   { name: 'Resume Analysis', path: '/student/resume-analysis', icon: 'Cpu' },
   { name: 'Find Jobs', path: '/student/jobs', icon: 'Briefcase' },
-  { name: 'Recommended Jobs', path: '/student/jobs?filter=recommended', icon: 'Sparkles' },
+  { name: 'Recommended Jobs', path: '/student/jobs/recommended', icon: 'Sparkles' },
   { name: 'Applications', path: '/student/applications', icon: 'Send' },
   { name: 'Interviews', path: '/student/interviews', icon: 'Calendar' },
   { name: 'Notifications', path: '/student/notifications', icon: 'Bell' },

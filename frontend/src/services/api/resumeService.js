@@ -1,8 +1,4 @@
-import apiClient, { simulateDelay } from './client';
-import { MOCK_RESUME_ANALYSIS, MOCK_ACTIVE_RESUME } from '../../data/mock/resumes';
-
-let currentResume = { ...MOCK_ACTIVE_RESUME };
-let currentAnalysis = { ...MOCK_RESUME_ANALYSIS };
+import apiClient from './client';
 
 export const resumeService = {
   /**
@@ -36,23 +32,18 @@ export const resumeService = {
   },
 
   /**
-   * Get resume analysis breakdown
+   * Get resume analysis breakdown from Spring Boot
    */
   async getAnalysis() {
-    await simulateDelay(300);
-    return { success: true, data: currentAnalysis };
+    const response = await apiClient.get('/resumes/analysis');
+    return response;
   },
 
   /**
-   * Trigger AI re-analysis
+   * Trigger AI re-analysis via Spring Boot
    */
   async reanalyze() {
-    await simulateDelay(700);
-    currentAnalysis = {
-      ...currentAnalysis,
-      overallScore: 84,
-      analyzedAt: new Date().toISOString(),
-    };
-    return { success: true, data: currentAnalysis, message: 'Resume re-analyzed with updated parameters' };
+    const response = await apiClient.post('/resumes/analyze');
+    return response;
   },
 };

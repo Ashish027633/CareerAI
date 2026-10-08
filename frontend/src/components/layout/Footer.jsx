@@ -94,7 +94,7 @@ export const Footer = () => {
               Engineered with clean separation of concerns for Java 21 Spring Boot and AI microservices integration.
             </p>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-border text-[11px] text-slate-dim font-mono shadow-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-success"></span> Phase 1 Prototype v1.0.0
+              <span className="w-1.5 h-1.5 rounded-full bg-success"></span> Production v1.0.0
             </div>
           </div>
         </div>

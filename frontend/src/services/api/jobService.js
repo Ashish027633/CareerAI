@@ -40,6 +40,22 @@ export const jobService = {
     const response = await apiClient.get(`/jobs/${id}`);
     return response;
   },
+
+  /**
+   * Get Job Match for a specific job (Student only)
+   */
+  async getJobMatch(id) {
+    const response = await apiClient.get(`/jobs/${id}/match`);
+    return response;
+  },
+
+  /**
+   * Get recommended jobs (Student only)
+   */
+  async getRecommendedJobs() {
+    const response = await apiClient.get('/jobs/recommended');
+    return response;
+  },
   
   /**
    * Get jobs created by current company

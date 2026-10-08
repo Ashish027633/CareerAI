@@ -3,43 +3,48 @@
 ## Project Goal
 CareerAI is an intelligent, AI-powered campus placement preparation, resume analysis, and job matching platform designed for students, recruiting companies, and institutional placement administrators. It bridges the gap between candidate resumes and modern company job descriptions through deep skill gap extraction, ATS resume scoring, job recommendations, applicant tracking, and placement analytics.
 
-## Current Phase
-PHASE 2D — FINAL BACKEND GAPS
+PHASE 4 — DATABASE MIGRATION & INTEGRATION (IMPLEMENTATION COMPLETE)
 
 ## Status
 Phase 1 Frontend completed.
-Phase 2A Backend Foundation completed.
-Phase 2B Backend Business Logic completed.
-Phase 2C Frontend ↔ Backend Integration completed.
-Phase 2D Final Backend Gaps is IN PROGRESS.
+Phase 2 (Backend Foundation, Business Logic, Frontend-Backend Integration, Gaps, Cleanup) completed.
+Phase 3A AI Service Foundation completed.
+Phase 3B Real Resume Intelligence completed.
+Phase 3C Smart Job Matching completed.
+Phase 3C Smart Job Matching completed.
+Phase 4 Database Migration & Integration (IMPLEMENTATION COMPLETE -> LOCAL MYSQL VALIDATION PENDING).
 
-## Completed
-- **Visual Identity & Design Tokens**: Transitioned from generic dashboard aesthetic to a bespoke, human-designed SaaS palette centered around deep dark obsidian (`#08090C`), rich burgundy/wine (`#991B32`), warm ivory highlights (`#F7F4EB`), and muted coral accents (`#E05D5D`). Centralized semantic tokens in `src/constants/themeTokens.js` and `tailwind.config.js`.
-- **Branding & Intentional Typography**: Built distinctive architectural geometric monogram `BrandLogo.jsx` and standardized typography hierarchy with font-mono metadata and grounded placement copy.
-- **Micro-Interactions & Motion System**: Implemented subtle button lifts (`hover:-translate-y-0.5`, `active:translate-y-0`), focus rings, card hover lift states, count-up metric animations on ATS scores, and strict `@media (prefers-reduced-motion: reduce)` support.
-- **Live Horizontal Text Scroller**: Created `TextTicker.jsx` with continuous seamless loop, pause-on-hover, zero overflow, and placement pulse messages.
-- **Landing Page Upgrade**: Redesigned Hero with live ATS Parser showcase, live text ticker, dual-workflow comparison (Candidate vs Recruiter), and wine/ivory CTA sections.
-- **Student Dashboard Refinement**: Established Resume Score as the primary visual centerpiece; eliminated repetitive icon-number grids; structured asymmetric placement pulse, interview alert, and skill gap matrix.
-- **Resume Experience & Multi-Step Analysis**: Implemented realistic staged scan states ("Scanning resume..." -> "Extracting skills..." -> "Comparing with current job demand..." -> "Analysis ready.") across resume uploads and re-analyses.
-- **Recruiter Console Upgrade**: Operational pipeline command strip, candidate ranking table, and requisition management.
-- **Admin Command Center**: Institutional key metrics bar, wine/coral area charts for monthly placement trends, and vertical bar charts for in-demand skills.
-- **Mobile Navigation & Accessibility**: Responsive drawer with backdrop blur, body scroll locking, and Escape key dismissal.
-- **Decoupled API Service Layer**: Forward-compatible service layer in `src/services/api/` (`authService`, `resumeService`, `jobService`, `applicationService`, `companyService`, `adminService`, `interviewService`, `notificationService`) ready for zero-rewrite Spring Boot connection.
-
-## Current Task
-Implementing final missing backend gaps: Admin directory endpoints and Interview edit/cancel operations.
-
-## Pending
-- Phase 3: AI/ML skill extraction and semantic embedding matching.
-- Phase 4: MySQL relational schema and JPA persistence.
-- Phase 5: Security hardening, testing, and deployment.
-- Phase 6: Documentation, presentation PPT, and viva defense materials.
-
-## Next Phase
-PHASE 3 — AI/ML SKILL EXTRACTION
+## Completed Features
+- **Visual Identity & Design Tokens**: Bespoke SaaS palette centered around deep dark obsidian (`#08090C`), rich burgundy/wine (`#991B32`), warm ivory highlights (`#F7F4EB`), and muted coral accents (`#E05D5D`). Centralized semantic tokens in `src/constants/themeTokens.js` and `tailwind.config.js`.
+- **Backend & REST APIs**: Spring Boot 3.3.4, Java 17, Spring Security JWT authentication, H2 JPA persistence for Student/Company profiles, Resumes, Jobs, Applications, Interviews, Admin directories.
+- **Python AI Microservice Foundation (Phase 3A)**: FastAPI application running locally on port 8000. `AiServiceClient` connection from Spring Boot to Python.
+- **Real Resume Intelligence Pipeline (Phase 3B)**:
+  - PyMuPDF text extraction with handling for normal, multi-page, empty, password-protected, or unreadable PDFs.
+  - Text cleaner preserving technical tokens (`C++`, `C#`, `.NET`, `Node.js`, `React.js`, `Spring Boot`, `scikit-learn`, `SQL`, `Java`).
+  - Section detector for SUMMARY, EDUCATION, SKILLS, PROJECTS, EXPERIENCE, CERTIFICATIONS, ACHIEVEMENTS, CONTACT.
+  - Token-aware skill extractor using categorized `skills.json` knowledge base with alias normalization (e.g. `js` -> `JavaScript`).
+  - Education, project, experience, and certification extractors.
+  - Deterministic 100-point CareerAI Resume Readiness Score (Skills 25, Projects 20, Education 15, Experience 15, Certifications 10, Structure 10, Completeness 5).
+  - Rule-based actionable improvement suggestions.
+  - H2 persistence of `ResumeAnalysis` entity linked to `Resume` versions.
+  - Real React display in `ResumeAnalysisPage.jsx` with radar breakdown, skills badges, score reasons, and AI disclaimer.
+- **Smart Job Matching & Recommendation Engine (Phase 3C)**:
+  - Python AI Service uses TF-IDF and Cosine Similarity to compare unstructured job descriptions against resume content (max 15 pts).
+  - Python evaluates strict requirements gaps (max 60 pts) and optional skills gap (max 15 pts) for a total AI Relevance Score of 90.
+  - Spring Boot enforces strict eligibility criteria (Minimum CGPA, Graduation Year, Backlogs) contributing 10 points or 0 points to the final 100-point match metric.
+  - Ineligible jobs retain their AI score but lose their eligibility contribution.
+  - `/api/jobs/recommended` strictly returns eligible jobs ranked dynamically by final match percentage.
+  - `JobDetailsPage.jsx` clearly breaks down AI match metrics vs institutional eligibility criteria with disclaimer.
 
 ## Technology Stack
-- **Frontend (Phase 1)**: React 18, Vite, JavaScript, Tailwind CSS, React Router v6, Lucide React, Recharts, Axios.
-- **Backend (Phase 2 - Current)**: Java 17, Spring Boot 3.3.4, Spring Security 6, JWT, Spring Data JPA, H2 Database (in-memory).
-- **Database (Phase 4)**: MySQL / PostgreSQL relational schema.
-- **AI/ML (Phase 3)**: Resume parsing, TF-IDF / vector embeddings, semantic skill extraction.
+- **Frontend**: React 18, Vite, JavaScript, Vanilla/Tailwind CSS, React Router v6, Lucide React, Recharts, Axios.
+- **Backend**: Java 17, Spring Boot 3.3.4, Spring Security 6, JWT, Spring Data JPA, H2 Database (in-memory).
+- **AI/ML Microservice**: Python 3.14, FastAPI, Uvicorn, Pydantic, PyMuPDF, pytest.
+
+## Next Phase
+## Next Phase
+PHASE 5 — TESTING, SECURITY & DEPLOYMENT
+
+## Limitations & Architecture Notes
+- **MySQL Migration Strategy**: Currently using `ddl-auto=update` as a temporary bootstrap mechanism for the initial MySQL rollout. Hibernate `ddl-auto=update` is NOT the final production schema migration strategy. A proper tool like Flyway/Liquibase will be needed in the future.
+- **MySQL Live Verification**: MySQL persistence-after-restart has not been explicitly tested locally yet because the MySQL runtime is unavailable in the local environment. Code and configuration are ready for validation.

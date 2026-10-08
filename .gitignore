@@ -36,8 +36,32 @@ Thumbs.db
 
 # Future Backend Build artifacts
 target/
+**/target/
 *.class
 *.jar
 *.war
 .mvn/
 bin/
+
+# Python / AI Service
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+.env.ai
+pytest_cache/
+.pytest_cache/
+
+# Scratch & Temporary Files
+*.pdf
+CheckDb.java
+test_flow.py
+test_duplicate.py
+test_notifications_flow.py
+test_ai_matcher.py
+test_e2e_phase3c.py
+generate_test_resume.py
+run_e2e_tests.py
