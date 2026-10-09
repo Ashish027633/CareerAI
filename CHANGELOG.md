@@ -2,6 +2,12 @@
 
 All notable changes to the CareerAI project will be documented in this file.
 
+## [5.0.0-phase-5-cloud-deployment] - 2026-10-10
+### Added (Phase 5 Cloud Deployment)
+- **Render Blueprint**: Configured ender.yaml for zero-downtime deployment of Spring Boot and Python FastAPI.
+- **AI Service Security**: Migrated Python AI service to a public web service (due to Render free tier limits) and secured all endpoints with a mandatory x-api-key header.
+- **Health Checks**: Standardized /api/health across services for Render orchestration.
+
 ## [4.0.0-phase-4-database-migration] - 2026-10-08
 ### Added (Phase 4 Database & Integration)
 - **Status**: Database migration/configuration implemented. H2 regression verified (19/19 passing). Live Aiven MySQL production database provisioned, secured, schema initialized with TLS verification, and persistence tested across restarts.

@@ -61,6 +61,6 @@ flowchart TD
    - **Schema Migration Limitation**: Currently using Hibernate `ddl-auto=update` as a temporary bootstrap mechanism for initial rollout. This is NOT the final production schema migration strategy.
    - **Phase 4 Status**: Verified using live Aiven MySQL with TLS. Schema initialized and persistence verified across restarts.
 3. **AI Service (Python FastAPI)**:
-   - Lightweight local Python microservice.
+   - Lightweight Python microservice deployed as a public web service, secured strictly by an environment-based `x-api-key`.
    - Computes deterministic 100-pt CareerAI Resume Readiness Score (Skills 25, Projects 20, Education 15, Experience 15, Certifications 10, Structure 10, Completeness 5).
    - Computes **AI Relevance Score (Max 90 pts)** for job matches (Required Skills 60 pts, Optional Skills 15 pts, Semantic Similarity via TF-IDF 15 pts).
