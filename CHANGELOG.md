@@ -1,10 +1,10 @@
-# CareerAI Changelog
+﻿# CareerAI Changelog
 
 All notable changes to the CareerAI project will be documented in this file.
 
 ## [4.0.0-phase-4-database-migration] - 2026-10-08
 ### Added (Phase 4 Database & Integration)
-- **Status**: Database migration/configuration implemented. H2 regression verified (19/19 passing). Live MySQL persistence verification pending due to unavailable local MySQL runtime.
+- **Status**: Database migration/configuration implemented. H2 regression verified (19/19 passing). Live Aiven MySQL production database provisioned, secured, schema initialized with TLS verification, and persistence tested across restarts.
 - **MySQL Compatibility**: Audited and modified JPA entities for MySQL production safety (`MEDIUMBLOB` for Resumes, `LONGTEXT` for AI Analysis JSON).
 - **Application Uniqueness**: Formalized the "One application ever per student/job" business rule via database-level `UNIQUE(student_id, job_id)` constraint on `job_applications`.
 - **Targeted Indexes**: Added optimized database indexes (`users.email`, `resumes.student_id`, `jobs.company_id`, `jobs.is_active`, `job_applications.student_id`, `job_applications.job_id`, `job_applications.status`, `notifications.user_id`, `notifications.is_read`).
@@ -44,6 +44,6 @@ All notable changes to the CareerAI project will be documented in this file.
 
 ## [2.3.0-backend-integration-and-cleanup] - 2026-10-08
 ### Added & Changed (Phase 2C, 2D, 2E)
-- **Phase 2C Frontend ↔ Backend Integration**: Connected all React frontend services to real Spring Boot REST APIs using Axios. Configured global interceptors for JWT injection and 401/403 error handling.
+- **Phase 2C Frontend â†” Backend Integration**: Connected all React frontend services to real Spring Boot REST APIs using Axios. Configured global interceptors for JWT injection and 401/403 error handling.
 - **Phase 2D Final Backend Gaps**: Implemented missing endpoints including Admin Directory endpoints (`/api/admin/students`, `/api/admin/companies`) and Interview Soft Delete / Cancellation strategy (`status = CANCELLED`).
 - **Phase 2E Production Cleanup**: Scrubbed demo labels, externalized environment variables, configured Vercel SPA routing.

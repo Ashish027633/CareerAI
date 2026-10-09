@@ -1,9 +1,9 @@
-# CareerAI Relational Database Schema Design (Phase 4A Updated)
+﻿# CareerAI Relational Database Schema Design (Phase 4A Updated)
 
 ## Overview
 Designed for MySQL 8+ / PostgreSQL / H2 with Spring Data JPA and Hibernate. All foreign keys, constraints, and audit fields are specified below.
 
-**Phase 4 Status**: Database migration/configuration implemented. H2 regression verified. Live MySQL persistence verification pending due to unavailable local MySQL runtime.
+**Phase 4 Status**: Verified using live Aiven MySQL with TLS. Schema initialized and persistence verified across restarts.
 
 > [!WARNING]
 > **Schema Migration Limitation**: Hibernate `ddl-auto=update` is used as a temporary bootstrap mechanism for the initial rollout. This is NOT the final production schema migration strategy.

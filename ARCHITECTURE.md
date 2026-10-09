@@ -1,4 +1,4 @@
-# CareerAI System Architecture (Phase 4A Updated)
+﻿# CareerAI System Architecture (Phase 4A Updated)
 
 ## 1. Architectural Overview
 CareerAI uses a 3-tier architecture with Spring Boot acting as the central API Gateway & Business Logic Core, and Python FastAPI acting as an internal AI microservice for local resume intelligence processing.
@@ -59,7 +59,7 @@ flowchart TD
    - Combines AI Relevance and Eligibility for a Final Match Percentage out of 100%.
    - `AiServiceClient` sends internal HTTP POST requests to Python.
    - **Schema Migration Limitation**: Currently using Hibernate `ddl-auto=update` as a temporary bootstrap mechanism for initial rollout. This is NOT the final production schema migration strategy.
-   - **Phase 4 Status**: Database migration/configuration implemented. H2 regression verified. Live MySQL persistence verification pending due to unavailable local MySQL runtime.
+   - **Phase 4 Status**: Verified using live Aiven MySQL with TLS. Schema initialized and persistence verified across restarts.
 3. **AI Service (Python FastAPI)**:
    - Lightweight local Python microservice.
    - Computes deterministic 100-pt CareerAI Resume Readiness Score (Skills 25, Projects 20, Education 15, Experience 15, Certifications 10, Structure 10, Completeness 5).
