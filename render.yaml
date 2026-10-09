@@ -1,10 +1,14 @@
 services:
-  # Internal AI Microservice (Python FastAPI)
-  - type: pserv
+  # Public AI Microservice (Python FastAPI)
+  - type: web
     name: careerai-ai-service
     env: docker
     rootDir: ai-service
     plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: API_KEY
+        generateValue: true
 
   # Public Spring Boot Backend Gateway
   - type: web
@@ -33,5 +37,10 @@ services:
       - key: SEED_DEMO_DATA
         value: "false"
       - key: AI_SERVICE_URL
-        # Render internal networking URL for the private service
-        value: "http://careerai-ai-service:8000"
+        # Public HTTPS URL of the AI service
+        value: "https://careerai-ai-service.onrender.com"
+      - key: AI_API_KEY
+        fromService:
+          type: web
+          name: careerai-ai-service
+          envVarKey: API_KEY
