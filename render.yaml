@@ -5,7 +5,6 @@ services:
     env: docker
     rootDir: ai-service
     plan: free
-    healthCheckPath: /health
 
   # Public Spring Boot Backend Gateway
   - type: web

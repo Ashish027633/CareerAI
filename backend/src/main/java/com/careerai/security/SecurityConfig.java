@@ -44,7 +44,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/h2-console/**", "/error").permitAll()
+                .requestMatchers("/api/auth/**", "/h2-console/**", "/error", "/api/health").permitAll()
                 .anyRequest().authenticated()
             )
             // Fix H2 console display issue (frames)
