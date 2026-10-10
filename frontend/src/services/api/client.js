@@ -1,8 +1,14 @@
 import axios from 'axios';
 
 const getBaseUrl = () => {
-  if (import.meta.env.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL;
+  let baseUrl = import.meta.env.VITE_API_BASE_URL;
+  if (baseUrl) {
+    // Ensure the baseUrl ends with /api (handling trailing slashes gracefully)
+    baseUrl = baseUrl.replace(/\/+$/, ''); // Remove trailing slashes
+    if (!baseUrl.endsWith('/api')) {
+      baseUrl += '/api';
+    }
+    return baseUrl;
   }
   if (import.meta.env.DEV) {
     return 'http://localhost:8080/api';
@@ -37,8 +43,12 @@ apiClient.interceptors.response.use(
   (error) => {
     const status = error.response?.status;
     const message = error.response?.data?.message || error.message || 'An unexpected server error occurred';
+    const configUrl = error.config?.url || '';
 
-    if (status === 401) {
+    // Do not treat 401s on login or register endpoints as session expiration
+    const isAuthEndpoint = configUrl.includes('/auth/login') || configUrl.includes('/auth/register');
+
+    if (status === 401 && !isAuthEndpoint) {
       // Clear authentication state centrally
       localStorage.removeItem('careerai_auth_user');
       localStorage.removeItem('careerai_token');
@@ -53,7 +63,7 @@ apiClient.interceptors.response.use(
     }
 
     const customError = {
-      message: status === 401 ? 'Your session has expired. Please log in again.' : message,
+      message: (status === 401 && !isAuthEndpoint) ? 'Your session has expired. Please log in again.' : message,
       status: status,
     };
     return Promise.reject(customError);

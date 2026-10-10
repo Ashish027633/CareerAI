@@ -23,7 +23,7 @@
 | Phase 4: Database & Integration | VERIFIED | Completed | Aiven MySQL production database provisioned, secured, schema initialized (ddl-auto=update), TLS verified. Live persistence/restart test passed. |
 | Phase 5A: Production Deployment Prep | VERIFIED | Completed | Verified configuration externalization, CORS, DB users, multi-part sizes, no real secrets. Tests passed. |
 | Phase 5B: Spring Boot Cloud Deployment | VERIFIED | Completed | Dockerfile created. Resolved multipart limits (10MB). Backend tested for production configuration. Verified database strategy. |
-| Phase 5C: Docker & Cloud Deployments | BLOCKED | Phase 5 | Render `render.yaml` updated to public web services with x-api-key authentication. Dockerfile permissions fixed. Tests isolated. |
+| Phase 5C: Docker & Cloud Deployments | IN PROGRESS | Phase 5 | Render render.yaml updated to public web services with x-api-key authentication. Dockerfile permissions fixed. Vercel frontend 401 interceptor loop fixed. |
 | Phase 6: Documentation, PPT & Viva | PENDING | Phase 6 | Final report, presentation slide deck, viva prep |
 
 ## Phase 3B Resume Intelligence Deliverables Completed
