@@ -37,7 +37,7 @@ def test_analyze_resume_endpoint_success():
 
     response = client.post(
         "/api/v1/analyze-resume",
-        headers={"x-api-key": "dev-secret-key"}, files={"file": ("resume.pdf", pdf_bytes, "application/pdf")}
+        headers={"x-api-key": "test-api-key"}, files={"file": ("resume.pdf", pdf_bytes, "application/pdf")}
     )
 
     assert response.status_code == 200
@@ -53,7 +53,7 @@ def test_analyze_resume_endpoint_success():
 def test_analyze_resume_invalid_extension():
     response = client.post(
         "/api/v1/analyze-resume",
-        headers={"x-api-key": "dev-secret-key"}, files={"file": ("resume.txt", b"Plain text content", "text/plain")}
+        headers={"x-api-key": "test-api-key"}, files={"file": ("resume.txt", b"Plain text content", "text/plain")}
     )
     assert response.status_code == 400
     assert response.json()["error"] == "UNSUPPORTED_FORMAT"

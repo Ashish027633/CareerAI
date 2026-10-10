@@ -24,7 +24,7 @@ public class AiServiceClient {
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
 
-    public AiServiceClient(@Value("${app.ai-service.url:http://127.0.0.1:8000}") String aiServiceUrl, @Value("${app.ai-service.api-key:dev-secret-key}") String apiKey,
+    public AiServiceClient(@Value("${app.ai-service.url:http://127.0.0.1:8000}") String aiServiceUrl, @Value("${app.ai-service.api-key}") String apiKey,
                             ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         // Set connection (3s) and read (30s) timeouts as per Phase 3B specifications
