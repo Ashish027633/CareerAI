@@ -37,8 +37,10 @@ services:
       - key: SEED_DEMO_DATA
         value: "false"
       - key: AI_SERVICE_URL
-        # Public HTTPS URL of the AI service
-        value: "https://careerai-ai-service.onrender.com"
+        fromService:
+          type: web
+          name: careerai-ai-service
+          envVarKey: RENDER_EXTERNAL_URL
       - key: AI_API_KEY
         fromService:
           type: web
