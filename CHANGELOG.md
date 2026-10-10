@@ -11,6 +11,9 @@ All notable changes to the CareerAI project will be documented in this file.
   - Fixed Vercel frontend Axios interceptor redirect loop on public registration pages and corrected `VITE_API_BASE_URL` parsing logic.
   - Corrected Render Blueprint `render.yaml` to dynamically resolve the `AI_SERVICE_URL` using `RENDER_EXTERNAL_URL` instead of a generic hardcoded host, preventing 404 Endpoint Not Found routing errors.
 
+  - Removed fabricated ATS scores and mock metrics from public/unauthenticated frontend components (`LandingPage.jsx`, `StudentResumePage.jsx`).
+  - Fixed Python AI service deployment failure resulting in `502 Bad Gateway` by removing strict build-requiring versions from `requirements.txt` to enable pre-built wheel downloads for Debian slim.
+
 ## [4.0.0-phase-4-database-migration] - 2026-10-08
 ### Added (Phase 4 Database & Integration)
 - **Status**: Database migration/configuration implemented. H2 regression verified (19/19 passing). Live Aiven MySQL production database provisioned, secured, schema initialized with TLS verification, and persistence tested across restarts.

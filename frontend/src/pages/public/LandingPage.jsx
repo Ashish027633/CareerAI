@@ -82,65 +82,7 @@ export const LandingPage = () => {
           </Link>
         </div>
 
-        {/* Hero Interactive ATS Visual Showcase Card */}
-        <div className="mt-12 max-w-4xl mx-auto bg-white border border-border rounded-3xl p-6 sm:p-8 shadow-card-hover text-left relative overflow-hidden animate-fade-up">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-border">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-burgundy text-white flex flex-col items-center justify-center shadow-wine flex-shrink-0">
-                <span className="text-2xl font-black font-mono">82</span>
-                <span className="text-[10px] font-bold uppercase tracking-wider font-mono opacity-85">/100</span>
-              </div>
-              <div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-base font-bold text-slate-text">ATS Parser & Benchmark Evaluation</h3>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono bg-success/10 text-success border border-success/30">
-                    High ATS Pass
-                  </span>
-                </div>
-                <p className="text-xs text-slate-muted mt-0.5">
-                  Automated evaluation calibrated for software engineering & systems roles.
-                </p>
-              </div>
-            </div>
 
-            <Link to="/student/resume-analysis">
-              <Button variant="outline" size="sm" icon={ArrowRight} iconPosition="right">
-                Inspect Diagnostic
-              </Button>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6">
-            <div className="bg-cream-soft rounded-2xl p-3.5 border border-border">
-              <span className="text-[11px] font-mono text-slate-dim uppercase tracking-wider font-semibold">Keyword Match</span>
-              <p className="text-base font-black text-slate-text mt-1">88%</p>
-              <div className="w-full bg-cream rounded-full h-1.5 mt-2 overflow-hidden">
-                <div className="bg-burgundy h-full rounded-full w-[88%]" />
-              </div>
-            </div>
-            <div className="bg-cream-soft rounded-2xl p-3.5 border border-border">
-              <span className="text-[11px] font-mono text-slate-dim uppercase tracking-wider font-semibold">Technical Depth</span>
-              <p className="text-base font-black text-slate-text mt-1">84%</p>
-              <div className="w-full bg-cream rounded-full h-1.5 mt-2 overflow-hidden">
-                <div className="bg-burgundy h-full rounded-full w-[84%]" />
-              </div>
-            </div>
-            <div className="bg-cream-soft rounded-2xl p-3.5 border border-border">
-              <span className="text-[11px] font-mono text-slate-dim uppercase tracking-wider font-semibold">Layout & ATS Format</span>
-              <p className="text-base font-black text-slate-text mt-1">92%</p>
-              <div className="w-full bg-cream rounded-full h-1.5 mt-2 overflow-hidden">
-                <div className="bg-success h-full rounded-full w-[92%]" />
-              </div>
-            </div>
-            <div className="bg-cream-soft rounded-2xl p-3.5 border border-border">
-              <span className="text-[11px] font-mono text-slate-dim uppercase tracking-wider font-semibold">Job Requisition Match</span>
-              <p className="text-base font-black text-slate-text mt-1">76%</p>
-              <div className="w-full bg-cream rounded-full h-1.5 mt-2 overflow-hidden">
-                <div className="bg-coral h-full rounded-full w-[76%]" />
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* 2. LIVE CONTINUOUS PULSE TICKER */}

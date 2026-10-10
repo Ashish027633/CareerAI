@@ -34,12 +34,15 @@ export const StudentResumePage = () => {
   const [deleting, setDeleting] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [uploadStage, setUploadStage] = useState('');
+  const [analysis, setAnalysis] = useState(null);
 
   const loadResume = async () => {
     setLoading(true);
     try {
       const res = await resumeService.getResume();
       if (res.success) setResume(res.data);
+      const anaRes = await resumeService.getAnalysis().catch(() => ({ success: false }));
+      if (anaRes.success) setAnalysis(anaRes.data);
     } finally {
       setLoading(false);
     }
@@ -78,6 +81,8 @@ export const StudentResumePage = () => {
         setUploadStage('Analysis ready.');
         await new Promise((r) => setTimeout(r, 400));
         setResume(res.data);
+        const anaRes = await resumeService.getAnalysis().catch(() => ({ success: false }));
+        if (anaRes.success) setAnalysis(anaRes.data);
         toast.success('Resume uploaded and benchmarked successfully!');
       }
     } catch {
@@ -118,6 +123,7 @@ export const StudentResumePage = () => {
       const res = await resumeService.deleteResume();
       if (res.success) {
         setResume(null);
+        setAnalysis(null);
         toast.success('Resume deleted successfully.');
         setDeleteModalOpen(false);
       }
@@ -136,11 +142,19 @@ export const StudentResumePage = () => {
         title="Resume Vault & ATS Verification"
         subtitle="Upload and manage your master PDF resume. CareerAI parses skill entities, formatting structure, and ATS readiness for campus placement drives."
         actions={
-          <Link to="/student/resume-analysis">
-            <Button variant="accent" size="sm" icon={Sparkles}>
-              View ATS Analysis (82/100)
-            </Button>
-          </Link>
+          analysis ? (
+            <Link to="/student/resume-analysis">
+              <Button variant="accent" size="sm" icon={Sparkles}>
+                View ATS Analysis ({analysis.overallScore}/100)
+              </Button>
+            </Link>
+          ) : resume ? (
+            <Link to="/student/resume-analysis">
+              <Button variant="outline" size="sm" icon={Sparkles}>
+                Analyze Document
+              </Button>
+            </Link>
+          ) : null
         }
       />
 
@@ -192,34 +206,18 @@ export const StudentResumePage = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-5 text-xs">
-            <div className="p-3.5 rounded-xl bg-[#FAF5EF] border border-[#E8DED4] flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[#238B68]/10 text-[#238B68] flex items-center justify-center flex-shrink-0">
-                <CheckCircle2 className="w-4 h-4" />
-              </div>
-              <div>
-                <span className="font-bold text-[#1E1B1C]">PDF Format Validated</span>
-                <p className="text-[11px] text-[#5F5A5C]">Single-column, machine readable</p>
-              </div>
-            </div>
-
-            <div className="p-3.5 rounded-xl bg-[#FAF5EF] border border-[#E8DED4] flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[#8B0026]/10 text-[#8B0026] flex items-center justify-center flex-shrink-0">
-                <ShieldCheck className="w-4 h-4" />
-              </div>
-              <div>
-                <span className="font-bold text-[#1E1B1C]">ATS Parser Certified</span>
-                <p className="text-[11px] text-[#5F5A5C]">Standard section headers detected</p>
-              </div>
-            </div>
-
+          <div className="grid grid-cols-1 sm:grid-cols-1 gap-3.5 pt-5 text-xs">
             <div className="p-3.5 rounded-xl bg-[#FAF5EF] border border-[#E8DED4] flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-[#D64F63]/10 text-[#D64F63] flex items-center justify-center flex-shrink-0">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
-                <span className="font-bold text-[#1E1B1C]">Overall Score: 82/100</span>
-                <p className="text-[11px] text-[#5F5A5C]">Top 15th percentile in cohort</p>
+                <span className="font-bold text-[#1E1B1C]">
+                  {analysis ? `Overall Score: ${analysis.overallScore}/100` : 'Not analyzed yet'}
+                </span>
+                <p className="text-[11px] text-[#5F5A5C]">
+                  {analysis ? 'Based on comprehensive ATS metrics' : 'Requires AI analysis'}
+                </p>
               </div>
             </div>
           </div>
