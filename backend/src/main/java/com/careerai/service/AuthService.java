@@ -43,6 +43,14 @@ public class AuthService {
         StudentProfile profile = new StudentProfile();
         profile.setUser(user);
         profile.setFullName(request.getFullName());
+        if (request.getPhone() != null) profile.setPhone(request.getPhone());
+        if (request.getCollege() != null) profile.setCollege(request.getCollege());
+        if (request.getBranch() != null) profile.setBranch(request.getBranch());
+        if (request.getGraduationYear() != null && !request.getGraduationYear().isBlank()) {
+            try {
+                profile.setGraduationYear(Integer.parseInt(request.getGraduationYear().trim()));
+            } catch (NumberFormatException ignored) {}
+        }
         
         user.setStudentProfile(profile);
         
@@ -65,6 +73,8 @@ public class AuthService {
         CompanyProfile profile = new CompanyProfile();
         profile.setUser(user);
         profile.setCompanyName(request.getCompanyName());
+        if (request.getIndustry() != null) profile.setIndustry(request.getIndustry());
+        if (request.getWebsite() != null) profile.setWebsite(request.getWebsite());
         
         user.setCompanyProfile(profile);
         
@@ -103,17 +113,26 @@ public class AuthService {
     private AuthResponse generateAuthResponse(User user, String name) {
         String token = jwtService.generateToken(new UserDetailsImpl(user));
         
+        String fullName = (user.getRole() == Role.ROLE_STUDENT && user.getStudentProfile() != null)
+                ? user.getStudentProfile().getFullName()
+                : (user.getRole() == Role.ROLE_STUDENT ? name : null);
+        String companyName = (user.getRole() == Role.ROLE_COMPANY && user.getCompanyProfile() != null)
+                ? user.getCompanyProfile().getCompanyName()
+                : (user.getRole() == Role.ROLE_COMPANY ? name : null);
+
         AuthResponse.UserDto userDto = AuthResponse.UserDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .name(name)
+                .fullName(fullName != null ? fullName : name)
+                .companyName(companyName != null ? companyName : name)
                 .role(user.getRole().name())
-                .permissions(List.of("READ", "WRITE")) // Mock permissions
+                .permissions(List.of("READ", "WRITE"))
                 .build();
                 
         return AuthResponse.builder()
                 .token(token)
-                .refreshToken("mock-refresh-token") // To be implemented later
+                .refreshToken("mock-refresh-token")
                 .user(userDto)
                 .build();
     }

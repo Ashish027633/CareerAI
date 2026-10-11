@@ -26,6 +26,14 @@ export const applicationService = {
   },
 
   /**
+   * Get all applicants across all company jobs
+   */
+  async getCompanyApplications() {
+    const response = await apiClient.get('/company/applications');
+    return response;
+  },
+
+  /**
    * Update applicant status (Shortlist, Reject, Interview, etc.)
    */
   async updateApplicantStatus(applicantId, status) {

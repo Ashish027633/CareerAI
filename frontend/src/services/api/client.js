@@ -62,9 +62,18 @@ apiClient.interceptors.response.use(
       }
     }
 
+    const fieldErrors = error.response?.data?.data;
+    let formattedMessage = error.response?.data?.message || error.message || 'An unexpected server error occurred';
+    if (fieldErrors && typeof fieldErrors === 'object' && Object.keys(fieldErrors).length > 0) {
+      const errorStrings = Object.entries(fieldErrors).map(([field, msg]) => `${field}: ${msg}`);
+      formattedMessage = `${formattedMessage} (${errorStrings.join(', ')})`;
+    }
+
     const customError = {
-      message: (status === 401 && !isAuthEndpoint) ? 'Your session has expired. Please log in again.' : message,
+      message: (status === 401 && !isAuthEndpoint) ? 'Your session has expired. Please log in again.' : formattedMessage,
       status: status,
+      errors: fieldErrors,
+      data: error.response?.data,
     };
     return Promise.reject(customError);
   }

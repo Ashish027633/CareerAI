@@ -111,12 +111,12 @@ export const StudentProfilePage = () => {
             </p>
           </div>
           <span className="text-2xl font-black text-burgundy font-mono">
-            {profile.profileCompletion || 78}%
+            {profile.profileCompletionPercentage ?? (profile.profileCompletion || 0)}%
           </span>
         </div>
 
         <ProgressBar
-          value={profile.profileCompletion || 78}
+          value={profile.profileCompletionPercentage ?? (profile.profileCompletion || 0)}
           color="primary"
           size="md"
           className="mb-4"
@@ -169,7 +169,8 @@ export const StudentProfilePage = () => {
           />
           <Input
             label="Location"
-            value={profile.location || 'Bengaluru, India'}
+            value={profile.location || ''}
+            placeholder="e.g. Bengaluru, India"
             onChange={(e) => setProfile({ ...profile, location: e.target.value })}
           />
           <div className="sm:col-span-2">

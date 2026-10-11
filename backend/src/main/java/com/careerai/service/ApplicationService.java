@@ -88,6 +88,17 @@ public class ApplicationService {
                 .collect(Collectors.toList());
     }
 
+    public List<ApplicationDto> getCompanyApplications() {
+        User user = getCurrentUser();
+        CompanyProfile company = companyProfileRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Company profile not found"));
+
+        return applicationRepository.findByJob_Company_Id(company.getId())
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public ApplicationDto updateApplicationStatus(Long applicationId, String statusStr) {
         ApplicationStatus newStatus = ApplicationStatus.valueOf(statusStr);
@@ -174,10 +185,14 @@ public class ApplicationService {
         dto.setId(application.getId());
         dto.setStudentId(application.getStudent().getId());
         dto.setStudentName(application.getStudent().getFullName());
+        if (application.getStudent().getUser() != null) {
+            dto.setStudentEmail(application.getStudent().getUser().getEmail());
+        }
         dto.setJobId(application.getJob().getId());
         dto.setJobTitle(application.getJob().getTitle());
         dto.setCompanyName(application.getJob().getCompany().getCompanyName());
         dto.setStatus(application.getStatus().name());
+        dto.setMatchPercentage(application.getMatchPercentage());
         dto.setAppliedAt(application.getAppliedAt());
         dto.setUpdatedAt(application.getUpdatedAt());
         return dto;

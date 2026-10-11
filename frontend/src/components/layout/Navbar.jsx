@@ -16,7 +16,7 @@ import { PUBLIC_NAV } from '../../constants/navigation';
 
 
 export const Navbar = ({ onToggleSidebar, isDashboard = false }) => {
-  const { user, role, logout, switchRole, isAuthenticated } = useAuth();
+  const { user, role, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -103,53 +103,8 @@ export const Navbar = ({ onToggleSidebar, isDashboard = false }) => {
           </nav>
         )}
 
-        {/* Right Actions: Role Switcher Demo, Notifications, Profile / Auth Buttons */}
+        {/* Right Actions: Notifications, Profile / Auth Buttons */}
         <div className="flex items-center gap-3">
-          {/* Quick Demo Role Switcher Badge (Interactive for testing convenience) */}
-          {import.meta.env.DEV && (
-            <div className="hidden sm:flex items-center gap-1 bg-cream-soft px-2.5 py-1 rounded-xl border border-border text-xs">
-              <span className="text-slate-muted font-mono text-[10px] mr-1 font-bold">DEV/TEST:</span>
-              <button
-                onClick={() => {
-                  switchRole('student');
-                  navigate('/student/dashboard');
-                }}
-                className={`px-2.5 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
-                  role === 'student'
-                    ? 'bg-burgundy text-white shadow-wine'
-                    : 'text-slate-muted hover:text-slate-text'
-                }`}
-              >
-                Student
-              </button>
-              <button
-                onClick={() => {
-                  switchRole('company');
-                  navigate('/company/dashboard');
-                }}
-                className={`px-2.5 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
-                  role === 'company'
-                    ? 'bg-burgundy text-white shadow-wine'
-                    : 'text-slate-muted hover:text-slate-text'
-                }`}
-              >
-                Company
-              </button>
-              <button
-                onClick={() => {
-                  switchRole('admin');
-                  navigate('/admin/dashboard');
-                }}
-                className={`px-2.5 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
-                  role === 'admin'
-                    ? 'bg-burgundy text-white shadow-wine'
-                    : 'text-slate-muted hover:text-slate-text'
-                }`}
-              >
-                Admin
-              </button>
-            </div>
-          )}
 
           {/* Notifications Dropdown (when authenticated) */}
           {isAuthenticated && (
@@ -236,12 +191,12 @@ export const Navbar = ({ onToggleSidebar, isDashboard = false }) => {
                   {user?.avatar ? (
                     <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
                   ) : (
-                    user?.fullName?.[0] || 'U'
+                    (user?.fullName || user?.companyName || user?.name || 'U')[0]
                   )}
                 </div>
                 <div className="hidden lg:flex flex-col text-left">
                   <span className="text-xs font-semibold text-slate-text leading-tight">
-                    {user?.fullName || user?.companyName || 'Ashish Sharma'}
+                    {user?.fullName || user?.companyName || user?.name || user?.email || 'User'}
                   </span>
                   <span className="text-[10px] font-medium text-slate-dim capitalize">
                     {role}
@@ -254,7 +209,7 @@ export const Navbar = ({ onToggleSidebar, isDashboard = false }) => {
                 <div className="absolute right-0 mt-2 w-56 bg-white border border-border rounded-xl shadow-card-hover z-50 py-1.5 animate-in fade-in slide-in-from-top-2">
                   <div className="px-4 py-2 border-b border-border bg-cream-soft">
                     <p className="text-xs font-bold text-slate-text truncate">
-                      {user?.fullName || user?.companyName}
+                      {user?.fullName || user?.companyName || user?.name || 'User'}
                     </p>
                     <p className="text-[11px] text-slate-dim truncate">{user?.email}</p>
                   </div>

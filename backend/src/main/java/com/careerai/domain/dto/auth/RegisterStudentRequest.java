@@ -15,4 +15,12 @@ public class RegisterStudentRequest {
 
     @NotBlank(message = "Full name is required")
     private String fullName;
+
+    private String phone;
+
+    private String college;
+
+    private String branch;
+
+    private String graduationYear;
 }

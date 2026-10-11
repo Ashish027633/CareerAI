@@ -320,58 +320,73 @@ export const StudentResumePage = () => {
               </button>
             </div>
 
-            {/* Document Sheet Simulation */}
+            {/* Document Sheet Information */}
             <div className="bg-[#FAF5EF]/60 text-[#1E1B1C] p-7 rounded-xl border border-[#E8DED4] font-sans text-xs leading-relaxed space-y-4 shadow-inner">
               <div className="border-b border-[#E8DED4] pb-3 text-center">
-                <h1 className="text-lg font-black uppercase tracking-wider text-[#1E1B1C]">
-                  Ashish Sharma
+                <h1 className="text-base font-black uppercase tracking-wider text-[#1E1B1C]">
+                  {resume?.fileName || 'Uploaded Resume Document'}
                 </h1>
                 <p className="text-[11px] text-[#5F5A5C] mt-1 font-mono">
-                  Bengaluru, India • ashish.sharma@college.edu • +91 98765 43210 • linkedin.com/in/ashishsharma-dev
+                  {resume?.fileSizeBytes ? `${(resume.fileSizeBytes / (1024 * 1024)).toFixed(2)} MB` : 'PDF'} • Uploaded: {formatDate(resume?.uploadedAt)}
                 </p>
               </div>
 
-              <div>
-                <h2 className="text-xs font-bold uppercase tracking-wider text-[#8B0026] border-b border-[#E8DED4] pb-1 mb-1.5">
-                  Education
-                </h2>
-                <div className="flex justify-between font-semibold text-[#1E1B1C]">
-                  <span>National Institute of Engineering & Technology</span>
-                  <span className="font-mono text-[#5F5A5C]">2022 - 2026</span>
-                </div>
-                <p className="text-[#5F5A5C]">B.Tech in Computer Science & Engineering | CGPA: <strong className="text-[#1E1B1C]">8.1 / 10.0</strong></p>
-              </div>
-
-              <div>
-                <h2 className="text-xs font-bold uppercase tracking-wider text-[#8B0026] border-b border-[#E8DED4] pb-1 mb-1.5">
-                  Technical Core Competencies
-                </h2>
-                <p className="text-[#5F5A5C] leading-relaxed">
-                  <strong className="text-[#1E1B1C]">Languages:</strong> Java (SE 17), Python, JavaScript (ES6+), SQL<br />
-                  <strong className="text-[#1E1B1C]">Frameworks & Tools:</strong> Spring Boot, React 18, MySQL, Docker, Git, RESTful Microservices, Tailwind CSS
-                </p>
-              </div>
-
-              <div>
-                <h2 className="text-xs font-bold uppercase tracking-wider text-[#8B0026] border-b border-[#E8DED4] pb-1 mb-1.5">
-                  Key Engineering Projects
-                </h2>
-                <div className="space-y-2">
+              {analysis ? (
+                <>
                   <div>
-                    <p className="font-bold text-[#1E1B1C]">Distributed Placement Portal (Java, Spring Boot, React, MySQL)</p>
-                    <p className="text-[#5F5A5C]">
-                      • Architected resilient REST services with sub-150ms latency for 1,500 active campus applicants.<br />
-                      • Engineered automated eligibility ranking algorithms and role-based credential safeguards.
+                    <h2 className="text-xs font-bold uppercase tracking-wider text-[#8B0026] border-b border-[#E8DED4] pb-1 mb-1.5">
+                      ATS Diagnostic Score
+                    </h2>
+                    <p className="text-[#1E1B1C] font-mono font-bold text-sm">
+                      {analysis.overallScore != null ? `${analysis.overallScore} / 100` : 'Pending'}
+                      <span className="text-xs font-normal text-[#5F5A5C] ml-2">
+                        ({analysis.experienceLevel || 'Fresher'} Level)
+                      </span>
                     </p>
                   </div>
-                  <div>
-                    <p className="font-bold text-[#1E1B1C]">Smart Resume ATS Parser (Python, Scikit-Learn)</p>
-                    <p className="text-[#5F5A5C]">
-                      • Built semantic entity extraction pipeline delivering 94% precision on technical credentials.
-                    </p>
-                  </div>
+
+                  {analysis.skills && analysis.skills.length > 0 && (
+                    <div>
+                      <h2 className="text-xs font-bold uppercase tracking-wider text-[#8B0026] border-b border-[#E8DED4] pb-1 mb-1.5">
+                        Extracted Technical Skills ({analysis.skills.length})
+                      </h2>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {analysis.skills.map((skill, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2 py-0.5 rounded bg-cream border border-[#E8DED4] text-[#1E1B1C] text-[11px] font-mono"
+                          >
+                            {typeof skill === 'string' ? skill : skill.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {analysis.education && analysis.education.length > 0 && (
+                    <div>
+                      <h2 className="text-xs font-bold uppercase tracking-wider text-[#8B0026] border-b border-[#E8DED4] pb-1 mb-1.5">
+                        Extracted Education
+                      </h2>
+                      <div className="space-y-1.5 mt-1.5">
+                        {analysis.education.map((edu, idx) => (
+                          <div key={idx} className="text-[#1E1B1C]">
+                            <p className="font-semibold">{edu.institution || edu.degree || 'Degree Program'}</p>
+                            <p className="text-[#5F5A5C] text-[11px] font-mono">{edu.field || ''} {edu.graduationYear ? `(${edu.graduationYear})` : ''}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="py-6 text-center text-slate-muted">
+                  <p className="font-semibold text-slate-text mb-1">Resume Analysis Pending</p>
+                  <p className="text-xs text-[#5F5A5C]">
+                    This PDF resume is stored in your Vault. Navigate to Resume Analysis to run the AI parser and view extracted skills and recommendations.
+                  </p>
                 </div>
-              </div>
+              )}
             </div>
 
             <div className="mt-5 pt-4 border-t border-[#E8DED4] flex justify-end gap-2">

@@ -20,29 +20,14 @@ export const LoginPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('ashish.sharma@college.edu');
-  const [password, setPassword] = useState('password123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
   const [selectedRole, setSelectedRole] = useState('student');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState('');
   const [googleNoticeModal, setGoogleNoticeModal] = useState(false);
-
-  const handleRoleQuickSelect = (role) => {
-    setSelectedRole(role);
-    if (role === 'student') {
-      setEmail('ashish.sharma@college.edu');
-      setPassword('password123');
-    } else if (role === 'company') {
-      setEmail('recruiter@techcorp.io');
-      setPassword('companyPass123');
-    } else {
-      setEmail('admin@careerai.edu');
-      setPassword('adminSecret2026');
-    }
-    setError('');
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,11 +40,12 @@ export const LoginPage = () => {
 
     setLoading(true);
     try {
-      const res = await login({ email, password, role: selectedRole });
+      const res = await login({ email, password });
       if (res.success) {
-        toast.success(`Welcome back, ${res.user.fullName || res.user.companyName}!`);
-        if (selectedRole === 'admin') navigate('/admin/dashboard');
-        else if (selectedRole === 'company') navigate('/company/dashboard');
+        toast.success(`Welcome back, ${res.user.fullName || res.user.companyName || res.user.name || 'User'}!`);
+        const userRole = (res.user.role || '').toLowerCase();
+        if (userRole.includes('admin')) navigate('/admin/dashboard');
+        else if (userRole.includes('company')) navigate('/company/dashboard');
         else navigate('/student/dashboard');
       }
     } catch (err) {
@@ -136,44 +122,6 @@ export const LoginPage = () => {
               </p>
             </div>
 
-            {/* Quick Developer Preset Tabs */}
-            {import.meta.env.DEV && (
-              <div className="mb-6 p-1 bg-cream-soft rounded-xl border border-border flex gap-1">
-                <button
-                  type="button"
-                  onClick={() => handleRoleQuickSelect('student')}
-                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                    selectedRole === 'student'
-                      ? 'bg-burgundy text-white shadow-wine'
-                      : 'text-slate-muted hover:text-slate-text'
-                  }`}
-                >
-                  Student (DEV)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleRoleQuickSelect('company')}
-                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                    selectedRole === 'company'
-                      ? 'bg-burgundy text-white shadow-wine'
-                      : 'text-slate-muted hover:text-slate-text'
-                  }`}
-                >
-                  Company (DEV)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleRoleQuickSelect('admin')}
-                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                    selectedRole === 'admin'
-                      ? 'bg-burgundy text-white shadow-wine'
-                      : 'text-slate-muted hover:text-slate-text'
-                  }`}
-                >
-                  Admin (DEV)
-                </button>
-              </div>
-            )}
 
             {error && (
               <div className="mb-4 p-3 rounded-xl bg-danger/10 border border-danger/25 text-xs text-danger font-semibold">

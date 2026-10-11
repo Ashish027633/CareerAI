@@ -34,15 +34,25 @@ export const CompanyApplicantsPage = () => {
   const [resumeModalOpen, setResumeModalOpen] = useState(false);
 
   const loadData = async () => {
+    if (!id) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const [resJob, resApps] = await Promise.all([
-        jobService.getJobById(id || 'job_01'),
-        applicationService.getApplicantsByJobId(id || 'job_01'),
+        jobService.getJobById(id).catch(() => ({ success: false, data: null })),
+        applicationService.getApplicantsByJobId(id).catch(() => ({ success: false, data: [] })),
       ]);
 
-      if (resJob.success) setJob(resJob.data);
-      if (resApps.success) setApplicants(resApps.data);
+      if (resJob?.success) setJob(resJob.data);
+      if (resApps?.success && Array.isArray(resApps.data)) {
+        setApplicants(resApps.data);
+      } else {
+        setApplicants([]);
+      }
+    } catch (err) {
+      console.error('Error loading applicants:', err);
     } finally {
       setLoading(false);
     }
@@ -66,8 +76,10 @@ export const CompanyApplicantsPage = () => {
   };
 
   if (loading) {
-    return <LoadingSpinner fullPage message="Ranking candidate talent graph..." />;
+    return <LoadingSpinner fullPage message="Loading candidate dossier..." />;
   }
+
+  const jobTitle = job?.title || 'Job Requisition';
 
   return (
     <div className="w-full space-y-6 animate-fade-up">
@@ -81,11 +93,11 @@ export const CompanyApplicantsPage = () => {
       </div>
 
       <PageHeader
-        title={`Applicants: ${job?.title || 'Java Backend Developer'}`}
-        subtitle={`Total Candidates: ${applicants.length} • Dynamically ranked by ATS competency match`}
+        title={`Applicants: ${jobTitle}`}
+        subtitle={`Total Candidates: ${applicants.length} • Verified candidate applications`}
         badge={
           <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#8B0026]/10 text-[#8B0026] border border-[#8B0026]/20">
-            ATS Ranked
+            {applicants.length} Candidates
           </span>
         }
       />
@@ -95,115 +107,114 @@ export const CompanyApplicantsPage = () => {
         <EmptyState
           icon={Users}
           title="No candidates have applied yet"
-          description="Applications from students who match your technical criteria will appear here automatically with resume ranking scores."
+          description="Applications from students who match your technical criteria will appear here automatically with verified details."
         />
       ) : (
         <div className="space-y-3.5">
-          {applicants.map((cand) => (
-            <Card
-              key={cand.id}
-              className="border-[#E8DED4] hover:border-[#8B0026]/40 transition-all shadow-sm"
-            >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                {/* Candidate Info */}
-                <div className="flex items-start gap-4">
-                  <img
-                    src={cand.avatar}
-                    alt={cand.candidateName}
-                    className="w-12 h-12 rounded-2xl object-cover border border-[#E8DED4] flex-shrink-0 shadow-2xs"
-                  />
-                  <div>
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <h4 className="text-base font-bold text-[#1E1B1C]">
-                        {cand.candidateName}
-                      </h4>
-                      <StatusBadge status={cand.status} />
-                      <span className="text-[11px] text-[#817B7E] font-mono">
-                        Applied: {cand.appliedDate}
-                      </span>
+          {applicants.map((cand) => {
+            const name = cand.studentName || cand.candidateName || 'Candidate';
+            const email = cand.studentEmail || cand.candidateEmail || 'No email provided';
+            const appliedDateStr = cand.appliedAt ? new Date(cand.appliedAt).toLocaleDateString() : (cand.appliedDate || 'Recent');
+            const skillsList = Array.isArray(cand.skills) ? cand.skills : [];
+
+            return (
+              <Card
+                key={cand.id}
+                className="border-[#E8DED4] hover:border-[#8B0026]/40 transition-all shadow-sm"
+              >
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                  {/* Candidate Info */}
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-[#FAF5EF] border border-[#E8DED4] flex items-center justify-center font-bold text-[#8B0026] text-lg flex-shrink-0 shadow-2xs">
+                      {name.charAt(0)}
                     </div>
-
-                    <p className="text-xs text-[#5F5A5C] mt-0.5">
-                      {cand.college} • {cand.branch} ({cand.graduationYear})
-                    </p>
-
-                    <div className="flex items-center gap-4 text-xs mt-2 text-[#5F5A5C] flex-wrap">
-                      <span className="flex items-center gap-1">
-                        <GraduationCap className="w-3.5 h-3.5 text-[#817B7E]" />
-                        CGPA: <strong className="text-[#1E1B1C]">{cand.cgpa}</strong>
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Award className="w-3.5 h-3.5 text-[#8B0026]" />
-                        ATS Score: <strong className="text-[#8B0026] font-mono">{cand.resumeScore}/100</strong>
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Sparkles className="w-3.5 h-3.5 text-[#238B68]" />
-                        Job Match: <strong className="text-[#238B68] font-mono">{cand.matchPercentage}%</strong>
-                      </span>
-                    </div>
-
-                    {/* Skills badges */}
-                    <div className="flex flex-wrap gap-1.5 mt-3">
-                      {cand.skills?.map((s) => (
-                        <span
-                          key={s}
-                          className="px-2 py-0.5 rounded-md bg-[#FAF5EF] text-[11px] text-[#5F5A5C] border border-[#E8DED4] font-medium"
-                        >
-                          {s}
+                    <div>
+                      <div className="flex items-center gap-2.5 flex-wrap">
+                        <h4 className="text-base font-bold text-[#1E1B1C]">
+                          {name}
+                        </h4>
+                        <StatusBadge status={cand.status} />
+                        <span className="text-[11px] text-[#817B7E] font-mono">
+                          Applied: {appliedDateStr}
                         </span>
-                      ))}
+                      </div>
+
+                      <p className="text-xs text-[#5F5A5C] mt-0.5">
+                        {email} {cand.college ? `• ${cand.college}` : ''}
+                      </p>
+
+                      <div className="flex items-center gap-4 text-xs mt-2 text-[#5F5A5C] flex-wrap">
+                        {cand.cgpa && (
+                          <span className="flex items-center gap-1">
+                            <GraduationCap className="w-3.5 h-3.5 text-[#817B7E]" />
+                            CGPA: <strong className="text-[#1E1B1C]">{cand.cgpa}</strong>
+                          </span>
+                        )}
+                        {cand.resumeScore != null && (
+                          <span className="flex items-center gap-1">
+                            <Award className="w-3.5 h-3.5 text-[#8B0026]" />
+                            ATS Score: <strong className="text-[#8B0026] font-mono">{cand.resumeScore}/100</strong>
+                          </span>
+                        )}
+                        <span className="flex items-center gap-1">
+                          <Sparkles className="w-3.5 h-3.5 text-[#238B68]" />
+                          Match: <strong className="text-[#238B68] font-mono">{cand.matchPercentage != null ? `${cand.matchPercentage}%` : 'Pending'}</strong>
+                        </span>
+                      </div>
+
+                      {/* Skills badges */}
+                      {skillsList.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-3">
+                          {skillsList.map((s) => (
+                            <span
+                              key={s}
+                              className="px-2 py-0.5 rounded-md bg-[#FAF5EF] text-[11px] text-[#5F5A5C] border border-[#E8DED4] font-medium"
+                            >
+                              {s}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
 
-                {/* Action Buttons */}
-                <div className="flex items-center gap-2 flex-wrap pt-3 lg:pt-0 border-t lg:border-t-0 border-[#E8DED4]">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    icon={Eye}
-                    onClick={() => setSelectedCandidate(cand)}
-                  >
-                    Dossier
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    icon={FileText}
-                    onClick={() => {
-                      setSelectedCandidate(cand);
-                      setResumeModalOpen(true);
-                    }}
-                  >
-                    Resume PDF
-                  </Button>
-
-                  {cand.status !== 'Shortlisted' && (
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-2 flex-wrap pt-3 lg:pt-0 border-t lg:border-t-0 border-[#E8DED4]">
                     <Button
-                      variant="primary"
+                      variant="outline"
                       size="sm"
-                      icon={CheckCircle}
-                      onClick={() => handleStatusUpdate(cand.id, 'Shortlisted')}
+                      icon={Eye}
+                      onClick={() => setSelectedCandidate(cand)}
                     >
-                      Shortlist
+                      Dossier
                     </Button>
-                  )}
 
-                  {cand.status !== 'Rejected' && (
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      icon={XCircle}
-                      onClick={() => handleStatusUpdate(cand.id, 'Rejected')}
-                    >
-                      Reject
-                    </Button>
-                  )}
+                    {cand.status !== 'Shortlisted' && (
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        icon={CheckCircle}
+                        onClick={() => handleStatusUpdate(cand.id, 'Shortlisted')}
+                      >
+                        Shortlist
+                      </Button>
+                    )}
+
+                    {cand.status !== 'Rejected' && (
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        icon={XCircle}
+                        onClick={() => handleStatusUpdate(cand.id, 'Rejected')}
+                      >
+                        Reject
+                      </Button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            );
+          })}
         </div>
       )}
 
@@ -212,8 +223,8 @@ export const CompanyApplicantsPage = () => {
         <Modal
           isOpen={!!selectedCandidate}
           onClose={() => setSelectedCandidate(null)}
-          title={`Candidate Dossier: ${selectedCandidate.candidateName}`}
-          subtitle={`${selectedCandidate.college} • Applied: ${selectedCandidate.appliedDate}`}
+          title={`Candidate Dossier: ${selectedCandidate.studentName || selectedCandidate.candidateName || 'Candidate'}`}
+          subtitle={`Applied: ${selectedCandidate.appliedAt ? new Date(selectedCandidate.appliedAt).toLocaleDateString() : (selectedCandidate.appliedDate || 'Recent')}`}
           footer={
             <div className="flex items-center gap-2">
               <Button
@@ -234,38 +245,38 @@ export const CompanyApplicantsPage = () => {
           }
         >
           <div className="space-y-4 text-xs">
-            <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="grid grid-cols-2 gap-2 text-center">
               <div className="p-3.5 rounded-xl bg-[#FAF5EF] border border-[#E8DED4]">
-                <p className="text-[#5F5A5C] text-[11px]">Match Score</p>
-                <p className="text-base font-bold text-[#238B68] font-mono mt-0.5">{selectedCandidate.matchPercentage}%</p>
+                <p className="text-[#5F5A5C] text-[11px]">Match Rating</p>
+                <p className="text-base font-bold text-[#238B68] font-mono mt-0.5">
+                  {selectedCandidate.matchPercentage != null ? `${selectedCandidate.matchPercentage}%` : 'Pending'}
+                </p>
               </div>
               <div className="p-3.5 rounded-xl bg-[#FAF5EF] border border-[#E8DED4]">
-                <p className="text-[#5F5A5C] text-[11px]">Resume Score</p>
-                <p className="text-base font-bold text-[#8B0026] font-mono mt-0.5">{selectedCandidate.resumeScore}/100</p>
-              </div>
-              <div className="p-3.5 rounded-xl bg-[#FAF5EF] border border-[#E8DED4]">
-                <p className="text-[#5F5A5C] text-[11px]">College CGPA</p>
-                <p className="text-base font-bold text-[#1E1B1C] font-mono mt-0.5">{selectedCandidate.cgpa}</p>
+                <p className="text-[#5F5A5C] text-[11px]">Pipeline Status</p>
+                <p className="text-base font-bold text-[#8B0026] font-mono mt-0.5">{selectedCandidate.status || 'APPLIED'}</p>
               </div>
             </div>
 
             <div>
               <p className="font-bold text-[#1E1B1C] mb-1">Contact Email:</p>
-              <p className="text-[#5F5A5C] font-mono">{selectedCandidate.candidateEmail}</p>
+              <p className="text-[#5F5A5C] font-mono">{selectedCandidate.studentEmail || selectedCandidate.candidateEmail || 'Not specified'}</p>
             </div>
 
-            <div>
-              <p className="font-bold text-[#1E1B1C] mb-2">Verified Skill Stack:</p>
-              <div className="flex flex-wrap gap-1.5">
-                {selectedCandidate.skills?.map((s) => (
-                  <SkillBadge key={s} skill={s} type="matched" size="sm" />
-                ))}
+            {Array.isArray(selectedCandidate.skills) && selectedCandidate.skills.length > 0 && (
+              <div>
+                <p className="font-bold text-[#1E1B1C] mb-2">Technical Skills:</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {selectedCandidate.skills.map((s) => (
+                    <SkillBadge key={s} skill={s} type="matched" size="sm" />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className="p-3.5 rounded-xl bg-[#8B0026]/10 border border-[#8B0026]/20 text-[#5F5A5C]">
-              <strong className="text-[#8B0026]">Recruiter Recommendation: </strong>
-              Candidate exceeds the minimum CGPA cutoff (8.1 vs 7.5 required) and displays advanced competency in Java, Spring Boot, and MySQL microservices.
+            <div className="p-3.5 rounded-xl bg-[#FAF5EF] border border-[#E8DED4] text-[#5F5A5C]">
+              <strong className="text-[#8B0026]">Recruiter Note: </strong>
+              Candidate submission verified through CareerAI platform. Review dossier and advance through pipeline as appropriate.
             </div>
           </div>
         </Modal>
@@ -276,8 +287,8 @@ export const CompanyApplicantsPage = () => {
         <Modal
           isOpen={resumeModalOpen}
           onClose={() => setResumeModalOpen(false)}
-          title={`Verified Resume: ${selectedCandidate.candidateName}`}
-          subtitle="Machine parsed PDF transcript"
+          title={`Candidate Dossier: ${selectedCandidate.studentName || selectedCandidate.candidateName || 'Candidate'}`}
+          subtitle="Application Transcript"
           footer={
             <Button variant="outline" size="sm" onClick={() => setResumeModalOpen(false)}>
               Close
@@ -286,16 +297,22 @@ export const CompanyApplicantsPage = () => {
         >
           <div className="bg-[#FAF5EF] text-[#1E1B1C] p-6 rounded-xl border border-[#E8DED4] text-xs space-y-3 font-sans shadow-inner">
             <div className="border-b border-[#E8DED4] pb-2.5 text-center">
-              <h2 className="text-base font-black uppercase text-[#1E1B1C]">{selectedCandidate.candidateName}</h2>
-              <p className="text-[#5F5A5C] text-[11px] font-mono mt-0.5">{selectedCandidate.candidateEmail} • {selectedCandidate.college}</p>
+              <h2 className="text-base font-black uppercase text-[#1E1B1C]">{selectedCandidate.studentName || selectedCandidate.candidateName || 'Candidate'}</h2>
+              <p className="text-[#5F5A5C] text-[11px] font-mono mt-0.5">{selectedCandidate.studentEmail || selectedCandidate.candidateEmail || 'No email'} {selectedCandidate.college ? `• ${selectedCandidate.college}` : ''}</p>
             </div>
+            {(selectedCandidate.branch || selectedCandidate.cgpa) && (
+              <div>
+                <h3 className="font-bold border-b border-[#E8DED4] pb-0.5 uppercase text-[#8B0026] text-[11px]">Academic Background</h3>
+                <p className="text-[#5F5A5C] mt-1">{selectedCandidate.branch || ''} {selectedCandidate.graduationYear ? `(Batch ${selectedCandidate.graduationYear})` : ''} {selectedCandidate.cgpa ? `• CGPA: ${selectedCandidate.cgpa}` : ''}</p>
+              </div>
+            )}
             <div>
-              <h3 className="font-bold border-b border-[#E8DED4] pb-0.5 uppercase text-[#8B0026] text-[11px]">Academic Background</h3>
-              <p className="text-[#5F5A5C] mt-1">{selectedCandidate.branch} (Batch {selectedCandidate.graduationYear}) • CGPA: <strong className="text-[#1E1B1C]">{selectedCandidate.cgpa}/10.0</strong></p>
-            </div>
-            <div>
-              <h3 className="font-bold border-b border-[#E8DED4] pb-0.5 uppercase text-[#8B0026] text-[11px]">Extracted Core Competencies</h3>
-              <p className="text-[#5F5A5C] mt-1 leading-relaxed">{selectedCandidate.skills.join(', ')}</p>
+              <h3 className="font-bold border-b border-[#E8DED4] pb-0.5 uppercase text-[#8B0026] text-[11px]">Candidate Match Details</h3>
+              <p className="text-[#5F5A5C] mt-1 leading-relaxed">
+                {Array.isArray(selectedCandidate.skills) && selectedCandidate.skills.length > 0
+                  ? selectedCandidate.skills.join(', ')
+                  : 'Skills evaluated during ATS resume matching.'}
+              </p>
             </div>
           </div>
         </Modal>

@@ -15,4 +15,8 @@ public class RegisterCompanyRequest {
 
     @NotBlank(message = "Company name is required")
     private String companyName;
+
+    private String industry;
+
+    private String website;
 }

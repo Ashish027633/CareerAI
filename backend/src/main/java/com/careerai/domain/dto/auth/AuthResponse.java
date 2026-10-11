@@ -24,6 +24,8 @@ public class AuthResponse {
         private Long id;
         private String email;
         private String name;
+        private String fullName;
+        private String companyName;
         private String role;
         private List<String> permissions;
     }

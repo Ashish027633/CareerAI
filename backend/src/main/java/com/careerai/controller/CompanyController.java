@@ -15,6 +15,12 @@ public class CompanyController {
 
     private final CompanyService companyService;
 
+    @GetMapping("/dashboard/stats")
+    @PreAuthorize("hasRole('COMPANY')")
+    public ResponseEntity<ApiResponse<com.careerai.dto.CompanyDashboardStatsDto>> getDashboardStats() {
+        return ResponseEntity.ok(ApiResponse.success("Company dashboard stats retrieved", companyService.getDashboardStats()));
+    }
+
     @GetMapping("/profile")
     @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<ApiResponse<CompanyProfileDto>> getProfile() {

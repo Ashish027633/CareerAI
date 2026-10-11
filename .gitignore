@@ -56,6 +56,7 @@ pytest_cache/
 
 # Scratch & Temporary Files
 *.pdf
+*.zip
 CheckDb.java
 test_flow.py
 test_duplicate.py

@@ -131,12 +131,12 @@ export const Sidebar = ({ isOpen, onClose }) => {
             {user?.avatar ? (
               <img src={user.avatar} alt="User" className="w-full h-full object-cover" />
             ) : (
-              user?.fullName?.[0] || 'U'
+              (user?.fullName || user?.companyName || user?.name || 'U')[0]
             )}
           </div>
           <div className="overflow-hidden min-w-0">
             <p className="text-xs font-bold text-slate-text truncate">
-              {user?.fullName || user?.companyName || 'Ashish Sharma'}
+              {user?.fullName || user?.companyName || user?.name || user?.email || 'User'}
             </p>
             <p className="text-[11px] text-slate-dim truncate">{user?.email}</p>
           </div>

@@ -43,6 +43,12 @@ public class ApplicationController {
         return ResponseEntity.ok(ApiResponse.success("Applicants retrieved successfully", applicationService.getJobApplicants(jobId)));
     }
 
+    @GetMapping("/company/applications")
+    @PreAuthorize("hasRole('COMPANY')")
+    public ResponseEntity<ApiResponse<List<ApplicationDto>>> getCompanyApplications() {
+        return ResponseEntity.ok(ApiResponse.success("Company applications retrieved successfully", applicationService.getCompanyApplications()));
+    }
+
     @PatchMapping("/company/applications/{id}/status")
     @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<ApiResponse<ApplicationDto>> updateApplicationStatus(

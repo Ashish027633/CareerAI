@@ -6,20 +6,26 @@ import { ShieldCheck, BarChart3 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const ResumeScoreCard = ({
-  score = 82,
+  score = null,
   maxScore = 100,
-  verdict = 'Strong Match for Junior/Associate Roles',
+  verdict = '',
   categoryScores = [],
   showActions = true,
   className = '',
 }) => {
+  const isScorePresent = score !== null && score !== undefined;
+  const targetScore = isScorePresent ? score : 0;
   const [displayScore, setDisplayScore] = useState(0);
 
   useEffect(() => {
-    // Check reduced motion preference
+    if (!isScorePresent) {
+      setDisplayScore(0);
+      return;
+    }
+
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (mediaQuery.matches) {
-      setDisplayScore(score);
+      setDisplayScore(targetScore);
       return;
     }
 
@@ -51,10 +57,10 @@ export const ResumeScoreCard = ({
         <div className="flex items-center gap-5 w-full md:w-auto">
           <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl flex flex-col items-center justify-center bg-burgundy text-white border-2 border-burgundy-dark shadow-wine transition-all flex-shrink-0">
             <span className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-white">
-              {displayScore}
+              {isScorePresent ? displayScore : '--'}
             </span>
             <span className="text-[11px] uppercase tracking-wider font-semibold opacity-85 font-mono">
-              / {maxScore}
+              {isScorePresent ? `/ ${maxScore}` : 'NOT SCORED'}
             </span>
           </div>
 
@@ -65,10 +71,12 @@ export const ResumeScoreCard = ({
               </span>
             </div>
             <h3 className="text-lg sm:text-xl font-black text-slate-text leading-snug">
-              {verdict}
+              {verdict || (isScorePresent ? 'Placement Assessment Complete' : 'No Resume Analysis Available')}
             </h3>
             <p className="text-xs text-slate-muted mt-1 leading-relaxed">
-              Standardized evaluation calibrated for university engineering placement benchmarks.
+              {isScorePresent
+                ? 'Standardized evaluation calibrated for university engineering placement benchmarks.'
+                : 'Upload your resume in the Vault and run analysis to calculate your diagnostic score.'}
             </p>
           </div>
         </div>

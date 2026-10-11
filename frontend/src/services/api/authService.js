@@ -15,6 +15,8 @@ export const authService = {
     if (user.role) {
       user.role = user.role.replace('ROLE_', '').toLowerCase();
     }
+    user.fullName = user.fullName || user.name;
+    user.companyName = user.companyName || user.name;
     
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     localStorage.setItem('careerai_token', token);
@@ -31,6 +33,8 @@ export const authService = {
     if (user.role) {
       user.role = user.role.replace('ROLE_', '').toLowerCase();
     }
+    user.fullName = user.fullName || user.name;
+    user.companyName = user.companyName || user.name;
     
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     localStorage.setItem('careerai_token', token);
@@ -41,12 +45,18 @@ export const authService = {
    * Register a new company account
    */
   async registerCompany(companyData) {
-    const response = await apiClient.post('/auth/register/company', companyData);
+    const payload = {
+      ...companyData,
+      email: companyData.email || companyData.officialEmail,
+    };
+    const response = await apiClient.post('/auth/register/company', payload);
     const { token, user } = response.data;
     
     if (user.role) {
       user.role = user.role.replace('ROLE_', '').toLowerCase();
     }
+    user.companyName = user.companyName || user.name;
+    user.fullName = user.fullName || user.name;
     
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     localStorage.setItem('careerai_token', token);
@@ -116,6 +126,9 @@ export const authService = {
     }
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem('careerai_token');
+    try {
+      sessionStorage.clear();
+    } catch (_) {}
     return { success: true };
   },
 };

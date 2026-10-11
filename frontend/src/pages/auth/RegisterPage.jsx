@@ -36,9 +36,9 @@ export const RegisterPage = () => {
     fullName: '',
     email: '',
     phone: '',
-    college: 'Apex Institute of Technology',
-    branch: 'Computer Science Engineering',
-    graduationYear: '2026',
+    college: '',
+    branch: '',
+    graduationYear: '',
     password: '',
     confirmPassword: '',
   });
@@ -66,6 +66,13 @@ export const RegisterPage = () => {
     setError('');
 
     const form = role === 'student' ? studentForm : companyForm;
+    const emailToValidate = role === 'student' ? studentForm.email : companyForm.officialEmail;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(emailToValidate)) {
+      setError('Please provide a valid email address.');
+      return;
+    }
 
     if (form.password.length < 8) {
       setError('Password must be at least 8 characters in length');
@@ -82,18 +89,33 @@ export const RegisterPage = () => {
       if (role === 'student') {
         const res = await registerStudent(studentForm);
         if (res.success) {
-          toast.success(`Welcome to CareerAI, ${res.user.fullName}!`);
+          toast.success(`Welcome to CareerAI, ${res.user.fullName || res.user.name}!`);
           navigate('/student/dashboard');
         }
       } else {
-        const res = await registerCompany(companyForm);
+        // Normalize website URL if entered without protocol
+        let normalizedWebsite = companyForm.website ? companyForm.website.trim() : '';
+        if (normalizedWebsite && !/^https?:\/\//i.test(normalizedWebsite)) {
+          normalizedWebsite = `https://${normalizedWebsite}`;
+        }
+
+        const res = await registerCompany({
+          ...companyForm,
+          website: normalizedWebsite,
+          email: companyForm.officialEmail,
+        });
         if (res.success) {
-          toast.success(`Registered corporate account for ${res.user.companyName}!`);
+          toast.success(`Registered corporate account for ${res.user.companyName || res.user.name}!`);
           navigate('/company/dashboard');
         }
       }
     } catch (err) {
-      setError(err.message || 'Registration failed. Please check inputs.');
+      let errorMsg = err.message || 'Registration failed. Please check inputs.';
+      if (err.errors && typeof err.errors === 'object') {
+        const details = Object.entries(err.errors).map(([k, v]) => `${k}: ${v}`).join('; ');
+        errorMsg = `Validation failed: ${details}`;
+      }
+      setError(errorMsg);
       toast.error('Registration failed');
     } finally {
       setLoading(false);
@@ -215,7 +237,7 @@ export const RegisterPage = () => {
                       name="fullName"
                       value={studentForm.fullName}
                       onChange={handleStudentChange}
-                      placeholder="e.g. Ashish Sharma"
+                      placeholder="e.g. John Doe"
                       icon={User}
                       required
                     />
@@ -225,7 +247,7 @@ export const RegisterPage = () => {
                       type="email"
                       value={studentForm.email}
                       onChange={handleStudentChange}
-                      placeholder="ashish@college.edu"
+                      placeholder="you@college.edu"
                       icon={Mail}
                       required
                     />
