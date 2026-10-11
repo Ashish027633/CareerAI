@@ -28,6 +28,7 @@ public class JobMatchingService {
     private final ResumeRepository resumeRepository;
     private final ResumeAnalysisRepository resumeAnalysisRepository;
     private final AiServiceClient aiServiceClient;
+    private final LocalResumeAnalyzer localResumeAnalyzer;
     private final JobService jobService;
     private final ObjectMapper objectMapper;
 
@@ -154,8 +155,14 @@ public class JobMatchingService {
         payload.put("requiredSkills", job.getRequiredSkills() != null ? job.getRequiredSkills() : List.of());
         payload.put("optionalSkills", job.getOptionalSkills() != null ? job.getOptionalSkills() : List.of());
 
-        // 4. Call Python AI Service
-        Map<String, Object> aiResult = aiServiceClient.matchJob(payload);
+        // 4. Call Python AI Service with fallback to built-in matching engine
+        Map<String, Object> aiResult;
+        try {
+            aiResult = aiServiceClient.matchJob(payload);
+        } catch (Exception e) {
+            log.warn("External AI match service call failed ({}); using built-in Job Matching engine.", e.getMessage());
+            aiResult = localResumeAnalyzer.matchJob(payload);
+        }
 
         int aiRelevanceScore = ((Number) aiResult.getOrDefault("aiRelevanceScore", 0)).intValue();
         int finalMatchPercentage = aiRelevanceScore + eligibilityContribution;

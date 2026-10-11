@@ -81,6 +81,13 @@
 			<version>4.0.0</version>
 		</dependency>
 
+		<!-- PDF Extraction for Resilient Resume Intelligence Fallback -->
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>2.0.31</version>
+		</dependency>
+
 		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>

@@ -34,6 +34,7 @@ public class ResumeService {
     private final StudentProfileRepository studentProfileRepository;
     private final UserRepository userRepository;
     private final AiServiceClient aiServiceClient;
+    private final LocalResumeAnalyzer localResumeAnalyzer;
     private final ObjectMapper objectMapper;
 
     @Transactional
@@ -61,6 +62,10 @@ public class ResumeService {
             resumeRepository.saveAll(previous);
 
             resumeRepository.save(resume);
+
+            // Automatically generate and save analysis so the resume is immediately ready
+            performAnalysisAndSave(resume, student);
+
             return mapToDto(resume);
         } catch (IOException e) {
             throw new RuntimeException("Failed to store resume data", e);
@@ -90,8 +95,35 @@ public class ResumeService {
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("No active resume found. Please upload a resume first."));
 
-        // Call Python AI Service
-        Map<String, Object> aiResponse = aiServiceClient.analyzeResume(activeResume.getFileData(), activeResume.getFileName());
+        ResumeAnalysis saved = performAnalysisAndSave(activeResume, student);
+        return mapToAnalysisDto(saved);
+    }
+
+    @Transactional
+    public ResumeAnalysisDto getLatestAnalysis() {
+        User user = getCurrentUser();
+        StudentProfile student = studentProfileRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Student profile not found"));
+
+        Resume activeResume = resumeRepository.findByStudentId(student.getId()).stream()
+                .filter(Resume::getIsActive)
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("No active resume found"));
+
+        ResumeAnalysis analysis = resumeAnalysisRepository.findByResumeId(activeResume.getId())
+                .orElseGet(() -> performAnalysisAndSave(activeResume, student));
+
+        return mapToAnalysisDto(analysis);
+    }
+
+    private ResumeAnalysis performAnalysisAndSave(Resume activeResume, StudentProfile student) {
+        Map<String, Object> aiResponse;
+        try {
+            aiResponse = aiServiceClient.analyzeResume(activeResume.getFileData(), activeResume.getFileName());
+        } catch (Exception e) {
+            log.warn("External AI microservice unavailable ({}). Activating built-in Resume Intelligence engine.", e.getMessage());
+            aiResponse = localResumeAnalyzer.analyze(activeResume.getFileData(), activeResume.getFileName(), student);
+        }
 
         try {
             String jsonPayload = objectMapper.writeValueAsString(aiResponse);
@@ -120,30 +152,12 @@ public class ResumeService {
             analysis.setPageCount(((Number) aiResponse.getOrDefault("pageCount", 1)).intValue());
             analysis.setRawAnalysisJson(jsonPayload);
 
-            ResumeAnalysis saved = resumeAnalysisRepository.save(analysis);
-            return mapToAnalysisDto(saved);
+            return resumeAnalysisRepository.save(analysis);
 
         } catch (JsonProcessingException e) {
             log.error("Failed to serialize AI analysis payload", e);
             throw new IllegalStateException("Failed to process resume analysis result.");
         }
-    }
-
-    @Transactional(readOnly = true)
-    public ResumeAnalysisDto getLatestAnalysis() {
-        User user = getCurrentUser();
-        StudentProfile student = studentProfileRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Student profile not found"));
-
-        Resume activeResume = resumeRepository.findByStudentId(student.getId()).stream()
-                .filter(Resume::getIsActive)
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("No active resume found"));
-
-        ResumeAnalysis analysis = resumeAnalysisRepository.findByResumeId(activeResume.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("No analysis available for the current resume."));
-
-        return mapToAnalysisDto(analysis);
     }
 
     private User getCurrentUser() {

@@ -452,4 +452,74 @@ public class ProductionDefectRegressionTest {
         assertFalse(v1.getIsActive(), "Older resume must be deactivated");
         assertTrue(v2.getIsActive(), "Latest resume must be active");
     }
+
+    @Test
+    @DisplayName("Defect 5: Resume upload automatically analyzes document and serves intelligence on /analysis and /analyze without errors")
+    void testResumeUploadAndAnalysisResilientFlow() throws Exception {
+        User studentUser = new User();
+        studentUser.setEmail("ashish.demo@college.edu");
+        studentUser.setPasswordHash(passwordEncoder.encode("password"));
+        studentUser.setRole(Role.ROLE_STUDENT);
+        studentUser.setIsActive(true);
+        userRepository.save(studentUser);
+
+        StudentProfile student = new StudentProfile();
+        student.setUser(studentUser);
+        student.setFullName("Ashish Sharma");
+        student.setCollege("National Institute of Technology");
+        student.setBranch("Computer Science");
+        student.setGraduationYear(2026);
+        studentProfileRepository.save(student);
+
+        String token = jwtService.generateToken(new UserDetailsImpl(studentUser));
+
+        // Create a valid synthetic PDF with content
+        byte[] pdfContent = ("%PDF-1.4\n" +
+                "1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n" +
+                "2 0 obj<</Type/Pages/Count 1/Kids[3 0 R]>>endobj\n" +
+                "3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Parent 2 0 R/Resources<<>>>>endobj\n" +
+                "xref\n0 4\n0000000000 65535 f\n0000000009 00000 n\n0000000052 00000 n\n0000000101 00000 n\n" +
+                "trailer<</Size 4/Root 1 0 R>>\nstartxref\n178\n%%EOF\n" +
+                "EDUCATION: B.Tech Computer Science\n" +
+                "SKILLS: Java, Spring Boot, React, MySQL, Docker, REST API, Git\n" +
+                "PROJECTS: CareerAI Placement Portal\n" +
+                "EXPERIENCE: Software Developer Intern\n" +
+                "CERTIFICATIONS: Oracle Java Certified\n").getBytes();
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "Ashish_Resume.pdf",
+                "application/pdf",
+                pdfContent
+        );
+
+        // 1. Upload resume
+        mockMvc.perform(multipart("/api/resumes/upload")
+                .file(file)
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.fileName").value("Ashish_Resume.pdf"))
+                .andExpect(jsonPath("$.data.isActive").value(true));
+
+        // 2. GET /analysis immediately returns analysis
+        mockMvc.perform(get("/api/resumes/analysis")
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.overallScore", greaterThan(0)))
+                .andExpect(jsonPath("$.data.categoryScores.skills", greaterThan(0)))
+                .andExpect(jsonPath("$.data.categoryScores.education", greaterThan(0)))
+                .andExpect(jsonPath("$.data.categoryScores.projects", greaterThan(0)))
+                .andExpect(jsonPath("$.data.skills", hasItem("Java")))
+                .andExpect(jsonPath("$.data.recommendations", not(empty())));
+
+        // 3. POST /analyze triggers re-analysis without 500 error even if external AI is down
+        mockMvc.perform(post("/api/resumes/analyze")
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.overallScore", greaterThan(0)))
+                .andExpect(jsonPath("$.data.categoryScores.structure", greaterThan(0)))
+                .andExpect(jsonPath("$.data.recommendations", not(empty())));
+    }
 }
