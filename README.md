@@ -131,5 +131,45 @@ CareerAI includes an instant role-switching utility located in the top navigatio
 
 ---
 
+---
+
+## 👥 Project Team & Contributions
+
+### Team Roster & Academic Identification
+
+| S. No. | Member Name | Roll Number | Role |
+| :---: | :--- | :--- | :--- |
+| 1 | **Ashish Sharma** | `24EARAD025` | Team Leader |
+| 2 | **Dev Upadhayay** | `24EARAD038` | Team Member |
+| 3 | **Chandan Kumar** | `24EARAD033` | Team Member |
+| 4 | **Gautam Bairwa** | `24EARAD054` | Team Member |
+| 5 | **Gauransh Rajiria** | `24EARAD051` | Team Member |
+
+### Academic Documentation & Work Logs
+- 📋 **Common Team Report**: [12-Week Team Contribution Report](academic-docs/TEAM_CONTRIBUTION_REPORT.md)
+- 👤 **Ashish Sharma**: [Team Leader Contribution Report (84-Day Log)](academic-docs/team-members/ASHISH_SHARMA.md)
+- 👤 **Dev Upadhayay**: [Frontend Engineering Contribution Report (84-Day Log)](academic-docs/team-members/DEV_UPADHAYAY.md)
+- 👤 **Chandan Kumar**: [Database & Persistence Contribution Report (84-Day Log)](academic-docs/team-members/CHANDAN_KUMAR.md)
+- 👤 **Gautam Bairwa**: [AI & NLP Microservice Contribution Report (84-Day Log)](academic-docs/team-members/GAUTAM_BAIRWA.md)
+- 👤 **Gauransh Rajiria**: [QA, Security & Documentation Contribution Report (84-Day Log)](academic-docs/team-members/GAURANSH_RAJIRIA.md)
+
+### Modular Responsibilities & Contribution Summary
+
+- **Ashish Sharma (Team Leader)**:
+  - *Verified Implementation*: System architecture, Spring Boot 3.3.4 gateway, Spring Security + stateless JWT authentication, cross-service REST communication, resilient PDFBox fallback engine (`LocalResumeAnalyzer.java`), Docker containerization, and Render/Vercel cloud deployment.
+  - *Coordination*: Code reviews, Git release management, sprint coordination, and mentor interactions.
+- **Dev Upadhayay (Team Member — Proposed Module: Frontend Architecture)**:
+  - *Proposed Responsibilities*: React 18 Single Page Application, Tailwind CSS editorial light theme design system, responsive navigation (`Navbar`, `Sidebar`), role dashboards (`StudentDashboard`, `CompanyDashboard`, `AdminDashboard`), and Axios API client integration.
+- **Chandan Kumar (Team Member — Proposed Module: Database & Persistence)**:
+  - *Proposed Responsibilities*: Relational database schema design (3NF), JPA entity mappings, Aiven Cloud MySQL integration with TLS/SSL encryption, relational BLOB storage for PDF resumes, index optimization, and persistence integrity testing.
+- **Gautam Bairwa (Team Member — Proposed Module: AI & NLP Microservice)**:
+  - *Proposed Responsibilities*: Python FastAPI microservice architecture, PyMuPDF (`fitz`) text extraction, standardized skills knowledge base (`skills.json`), 100-point transparent ATS scoring algorithm, Scikit-Learn TF-IDF semantic job matching, and Pytest test suite.
+- **Gauransh Rajiria (Team Member — Proposed Module: QA, Security & Documentation)**:
+  - *Proposed Responsibilities*: Comprehensive automated testing (JUnit 5, MockMvc, Pytest), Role-Based Access Control (RBAC) security audits, IEEE-standard SRS documentation, testing documentation (`08_Testing_Documentation.md`), presentation slides, and technical Viva defense guide (`11_Demo_Viva_Guide.md`).
+
+> *Note: Verified contributions reflect technical code authoring and repository commits; modular responsibilities represent the agreed academic collaboration framework.*
+
+---
+
 ## 📄 License
 This project is developed as part of an institutional placement intelligence initiative. All rights reserved.

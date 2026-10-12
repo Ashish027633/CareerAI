@@ -17,6 +17,8 @@ This directory contains the complete, editable academic documentation package fo
 ### 3. Team & Progress Tracking
 - [`06_Team_Module_Plan.md`](./06_Team_Module_Plan.md): Distribution of the 5 core modules among team members.
 - [`07_Weekly_Progress_Plan.md`](./07_Weekly_Progress_Plan.md): The 10-week execution timeline, work-log templates, and meeting minutes.
+- [`TEAM_CONTRIBUTION_REPORT.md`](./TEAM_CONTRIBUTION_REPORT.md): Comprehensive 12-week master team contribution report and 84-day schedule.
+- [`team-members/`](./team-members/): Dedicated 12-week individual contribution reports for each of the 5 team members (`ASHISH_SHARMA.md`, `DEV_UPADHAYAY.md`, `CHANDAN_KUMAR.md`, `GAUTAM_BAIRWA.md`, `GAURANSH_RAJIRIA.md`).
 
 ### 4. Testing & Delivery
 - [`08_Testing_Documentation.md`](./08_Testing_Documentation.md): Multi-tiered testing strategy and live End-to-End test outcomes.
