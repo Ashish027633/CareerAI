@@ -15,13 +15,20 @@ export const CompanyJobCreatePage = () => {
   const toast = useToast();
 
   const [loading, setLoading] = useState(false);
+  // jobType display → backend enum name map
+  const JOB_TYPE_MAP = {
+    'Full-time':  'FULL_TIME',
+    'Internship': 'INTERNSHIP',
+    'Contract':   'CONTRACT',
+    'Remote':     'REMOTE',
+  };
+
   const [form, setForm] = useState({
     title: '',
-    company: 'TechCorp Solutions',
     location: 'Bengaluru, India',
-    salary: '₹10 - ₹14 LPA',
+    salaryRange: '₹10 - ₹14 LPA',
     jobType: 'Full-time',
-    experience: '0-2 Years',
+    experienceLevel: '0-2 Years',
     minCgpa: '7.5',
     description: '',
     skillsString: 'Java, Spring Boot, MySQL, REST API, Docker',
@@ -55,9 +62,16 @@ export const CompanyJobCreatePage = () => {
         .map((s) => s.trim())
         .filter(Boolean);
 
+      // Build a clean payload — only send fields the backend DTO expects.
+      // jobType must be the enum name (FULL_TIME / INTERNSHIP / CONTRACT / REMOTE)
       const payload = {
-        ...form,
-        minCgpa: parseFloat(form.minCgpa) || 7.0,
+        title:           form.title,
+        description:     form.description,
+        location:        form.location,
+        salaryRange:     form.salaryRange,
+        experienceLevel: form.experienceLevel,
+        jobType:         JOB_TYPE_MAP[form.jobType] || 'FULL_TIME',
+        minCgpa:         parseFloat(form.minCgpa) || 7.0,
         requiredSkills,
         responsibilities,
         benefits,
@@ -107,13 +121,6 @@ export const CompanyJobCreatePage = () => {
               required
             />
             <Input
-              label="Hiring Entity"
-              name="company"
-              value={form.company}
-              onChange={handleChange}
-              required
-            />
-            <Input
               label="Location"
               name="location"
               value={form.location}
@@ -121,10 +128,18 @@ export const CompanyJobCreatePage = () => {
             />
             <Input
               label="CTC / Compensation"
-              name="salary"
-              value={form.salary}
+              name="salaryRange"
+              value={form.salaryRange}
               onChange={handleChange}
               placeholder="e.g. ₹12 - ₹16 LPA"
+            />
+            <Input
+              label="Minimum CGPA Eligibility"
+              type="number"
+              step="0.1"
+              name="minCgpa"
+              value={form.minCgpa}
+              onChange={handleChange}
             />
             <Select
               label="Engagement Type"
@@ -135,15 +150,19 @@ export const CompanyJobCreatePage = () => {
                 { label: 'Full-time', value: 'Full-time' },
                 { label: 'Internship', value: 'Internship' },
                 { label: 'Contract', value: 'Contract' },
+                { label: 'Remote', value: 'Remote' },
               ]}
             />
-            <Input
-              label="Minimum CGPA Eligibility"
-              type="number"
-              step="0.1"
-              name="minCgpa"
-              value={form.minCgpa}
+            <Select
+              label="Experience Level"
+              name="experienceLevel"
+              value={form.experienceLevel}
               onChange={handleChange}
+              options={[
+                { label: '0-2 Years (Fresher)', value: '0-2 Years' },
+                { label: '2-5 Years', value: '2-5 Years' },
+                { label: '5+ Years', value: '5+ Years' },
+              ]}
             />
           </div>
 

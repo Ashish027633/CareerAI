@@ -87,7 +87,11 @@ public class JobService {
         job.setLocation(dto.getLocation());
         job.setSalaryRange(dto.getSalaryRange());
         if (dto.getJobType() != null) {
-            job.setJobType(com.careerai.domain.enums.JobType.valueOf(dto.getJobType()));
+            try {
+                job.setJobType(com.careerai.domain.enums.JobType.valueOf(dto.getJobType().trim().toUpperCase().replace("-", "_").replace(" ", "_")));
+            } catch (IllegalArgumentException ex) {
+                job.setJobType(com.careerai.domain.enums.JobType.FULL_TIME);
+            }
         }
         job.setExperienceLevel(dto.getExperienceLevel());
         if (dto.getMinCgpa() != null) {
