@@ -24,6 +24,7 @@ public class JobService {
     private final JobRepository jobRepository;
     private final CompanyProfileRepository companyProfileRepository;
     private final UserRepository userRepository;
+    private final com.careerai.domain.repository.JobApplicationRepository jobApplicationRepository;
 
     public List<JobDto> getAllActiveJobs() {
         return jobRepository.findByIsActiveTrue()
@@ -141,6 +142,7 @@ public class JobService {
         dto.setCreatedAt(job.getCreatedAt());
         dto.setCompanyId(job.getCompany().getId());
         dto.setCompanyName(job.getCompany().getCompanyName());
+        dto.setApplicantCount(jobApplicationRepository.countByJobId(job.getId()));
         return dto;
     }
 }

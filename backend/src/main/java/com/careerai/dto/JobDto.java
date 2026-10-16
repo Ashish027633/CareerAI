@@ -23,4 +23,5 @@ public class JobDto {
     private LocalDateTime updatedAt;
     private Long companyId;
     private String companyName;
+    private Long applicantCount;
 }
